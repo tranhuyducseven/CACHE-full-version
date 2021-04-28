@@ -137,11 +137,14 @@ Elem *Cache::put(int addr, Data *cont) {
     //put to queue
     if (p == 15) {
         Elem *temp = this->arr[0];
+        delete this->arr[0]->data;
         for (int i = 0; i < p - 1; i++) {
-            arr[i] = arr[i + 1];
+            arr[i]->data = arr[i + 1]->data;
         }
 
-        arr[14] = new Elem(addr, cont, true);
+        arr[14]->addr=addr;
+        arr[14]->data=cont;
+        arr[14]->sync=true;
 
 
         //delete node
@@ -152,7 +155,7 @@ Elem *Cache::put(int addr, Data *cont) {
         return temp;
     }
     arr[p++] = new Elem(addr, cont, true);
-       //put to AVLTree
+    //put to AVLTree
     this->obj.ROOT = this->obj.insert(obj.ROOT, this->arr[p - 1]);
     return nullptr;
 }
@@ -179,24 +182,21 @@ Elem *Cache::write(int addr, Data *cont) {
     if (!found) {
         if (p == 15) {
             Elem *temp = this->arr[0];
-            //store attributes of temp;
-            int tempAddr = temp->addr;
-            Data *tempData = temp->data;
+            delete this->arr[0]->data;
             //delete first element
             for (int i = 0; i < p - 1; i++)
-                arr[i] = arr[i + 1];
+                arr[i]->data = arr[i + 1]->data;
 
             //add last element
-            arr[14] = new Elem(addr, cont, false);
+            arr[14]->addr=addr;
+            arr[14]->data=cont;
+            arr[14]->sync=false;
 
             //delete from AVL
             this->obj.ROOT = this->obj.deleteNode(this->obj.ROOT, temp->addr);
 
             //add new node
             this->obj.ROOT = this->obj.insert(obj.ROOT, this->arr[14]);
-
-            temp->addr = tempAddr;
-            temp->data = tempData;
             return temp;
         }
         arr[p++] = new Elem(addr, cont, false);
@@ -234,3 +234,4 @@ void Cache::inOrderAVL(TreeNode *root) {
         inOrderAVL(root->right);
     }
 }
+//1 warning by main

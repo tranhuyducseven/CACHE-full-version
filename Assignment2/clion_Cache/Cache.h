@@ -78,5 +78,5 @@ public:
 
     void inOrderAVL(TreeNode *);
 };
-//1 warning
+//1 warning by main simulate()
 #endif

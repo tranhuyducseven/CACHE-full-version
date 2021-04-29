@@ -137,22 +137,15 @@ Elem *Cache::put(int addr, Data *cont) {
     //put to queue
     if (p == 15) {
         Elem *temp = this->arr[0];
-        for (int i = 0; i < p - 1; i++) {
-            arr[i]->data = arr[i + 1]->data;
-            arr[i]->addr = arr[i + 1]->addr;
-            arr[i]->sync = arr[i + 1]->sync;
-        }
-
-        arr[14]->addr = addr;
-        arr[14]->data = cont;
-        arr[14]->sync = true;
-
-
         //delete node
         this->obj.ROOT = this->obj.deleteNode(this->obj.ROOT, temp->addr);
-
+        for (int i = 0; i < p - 1; i++) {
+            arr[i]=arr[i+1];
+        }
+        Elem *newEle = new Elem(addr, cont, true);
+        arr[14]=newEle;
         //add new node
-        this->obj.ROOT = this->obj.insert(obj.ROOT, this->arr[14]);
+        this->obj.ROOT = this->obj.insert(obj.ROOT, newEle);
         return temp;
     }
     arr[p++] = new Elem(addr, cont, true);
@@ -183,21 +176,16 @@ Elem *Cache::write(int addr, Data *cont) {
     if (!found) {
         if (p == 15) {
             Elem *temp = this->arr[0];
-            for (int i = 0; i < p - 1; i++) {
-                arr[i]->data = arr[i + 1]->data;
-                arr[i]->addr = arr[i + 1]->addr;
-                arr[i]->sync = arr[i + 1]->sync;
-            }
-
-            arr[14]->addr = addr;
-            arr[14]->data = cont;
-            arr[14]->sync = false;
-
-            //delete from AVL
+            //delete node
             this->obj.ROOT = this->obj.deleteNode(this->obj.ROOT, temp->addr);
-
+            for (int i = 0; i < p - 1; i++) {
+                arr[i]=arr[i+1];
+            }
+            Elem *temp2 = arr[14];
+            Elem *newEle = new Elem(addr, cont, false);
+            arr[14]=newEle;
             //add new node
-            this->obj.ROOT = this->obj.insert(obj.ROOT, this->arr[14]);
+            this->obj.ROOT = this->obj.insert(obj.ROOT, newEle);
             return temp;
         }
         arr[p++] = new Elem(addr, cont, false);

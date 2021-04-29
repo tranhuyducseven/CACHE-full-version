@@ -43,6 +43,7 @@ class Cache {
     Elem **arr;
     int p;
     AVLTree obj;
+
 public:
     Cache(int s) {
         arr = new Elem *[(unsigned long) s];

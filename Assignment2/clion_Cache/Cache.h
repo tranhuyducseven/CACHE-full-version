@@ -43,22 +43,18 @@ class Cache {
     Elem **arr;
     int p;
     AVLTree obj;
-    int delArray[MAXSIZE];
 public:
     Cache(int s) {
-        arr = new Elem *[s];
+        arr = new Elem *[(unsigned long) s];
         p = 0;
-        for (int i = 0; i < MAXSIZE; i++) {
-            delArray[i] = -1;
-        }
+        for (int i = 0; i < MAXSIZE; i++)
+            arr[i] = nullptr;
     }
 
     ~Cache() {
-        for(int i =0;i<15;i++){
-            delete arr[i]->data;
+        for (int i = 0; i < MAXSIZE; i++) {
             delete arr[i];
         }
-
         delete[] arr;
     }
 
@@ -77,6 +73,7 @@ public:
     void preOrderAVL(TreeNode *);
 
     void inOrderAVL(TreeNode *);
+
 };
-//1 warning by main simulate()
+//12:53 AM
 #endif

@@ -106,11 +106,11 @@ TreeNode *AVLTree::deleteNode(TreeNode *root, int val) {
             return temp;
         } else //  two children
         {
-            TreeNode *temp = root->left;
-            while (temp->right != nullptr)
-                temp = temp->right;
+            TreeNode *temp = root->right;
+            while (temp->left != nullptr)
+                temp = temp->left;
             root->ele->addr = temp->ele->addr;
-            root->left = deleteNode(root->left, temp->ele->addr);
+            root->right = deleteNode(root->right, temp->ele->addr);
         }
     }
     int bf = getBalanceFactor(root);
@@ -137,14 +137,15 @@ Elem *Cache::put(int addr, Data *cont) {
     //put to queue
     if (p == 15) {
         Elem *temp = this->arr[0];
-        delete this->arr[0]->data;
         for (int i = 0; i < p - 1; i++) {
             arr[i]->data = arr[i + 1]->data;
+            arr[i]->addr = arr[i + 1]->addr;
+            arr[i]->sync = arr[i + 1]->sync;
         }
 
-        arr[14]->addr=addr;
-        arr[14]->data=cont;
-        arr[14]->sync=true;
+        arr[14]->addr = addr;
+        arr[14]->data = cont;
+        arr[14]->sync = true;
 
 
         //delete node
@@ -165,7 +166,7 @@ Elem *Cache::write(int addr, Data *cont) {
     //write to queue;
     for (int i = 0; i < p; i++)
         if (arr[i]->addr == addr) {
-
+            delete arr[i]->data;
             arr[i]->data = cont;
             arr[i]->sync = false;
             found = true;
@@ -182,15 +183,15 @@ Elem *Cache::write(int addr, Data *cont) {
     if (!found) {
         if (p == 15) {
             Elem *temp = this->arr[0];
-            delete this->arr[0]->data;
-            //delete first element
-            for (int i = 0; i < p - 1; i++)
+            for (int i = 0; i < p - 1; i++) {
                 arr[i]->data = arr[i + 1]->data;
+                arr[i]->addr = arr[i + 1]->addr;
+                arr[i]->sync = arr[i + 1]->sync;
+            }
 
-            //add last element
-            arr[14]->addr=addr;
-            arr[14]->data=cont;
-            arr[14]->sync=false;
+            arr[14]->addr = addr;
+            arr[14]->data = cont;
+            arr[14]->sync = false;
 
             //delete from AVL
             this->obj.ROOT = this->obj.deleteNode(this->obj.ROOT, temp->addr);
@@ -225,6 +226,7 @@ void Cache::preOrderAVL(TreeNode *root) {
 
 void Cache::inOrder() {
     inOrderAVL(this->obj.ROOT);
+
 }
 
 void Cache::inOrderAVL(TreeNode *root) {
@@ -234,4 +236,4 @@ void Cache::inOrderAVL(TreeNode *root) {
         inOrderAVL(root->right);
     }
 }
-//1 warning by main
+//12:53 AM

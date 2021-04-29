@@ -181,7 +181,6 @@ Elem *Cache::write(int addr, Data *cont) {
             for (int i = 0; i < p - 1; i++) {
                 arr[i]=arr[i+1];
             }
-            Elem *temp2 = arr[14];
             Elem *newEle = new Elem(addr, cont, false);
             arr[14]=newEle;
             //add new node

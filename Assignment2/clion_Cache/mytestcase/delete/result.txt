@@ -1,0 +1,411 @@
+-----------------tests/mytestcase/delete/test1.txt------------
+2 1 true
+Print AVL in preorder
+2 1 true
+Print AVL in inorder
+2 1 true
+-----------------tests/mytestcase/delete/test2.txt------------
+2 2 true
+3 3 true
+Print AVL in preorder
+2 2 true
+3 3 true
+Print AVL in inorder
+2 2 true
+3 3 true
+-----------------tests/mytestcase/delete/test3.txt------------
+1 1 true
+3 3 true
+Print AVL in preorder
+1 1 true
+3 3 true
+Print AVL in inorder
+1 1 true
+3 3 true
+-----------------tests/mytestcase/delete/test4.txt------------
+1 1 true
+3 3 true
+4 4 true
+Print AVL in preorder
+3 3 true
+1 1 true
+4 4 true
+Print AVL in inorder
+1 1 true
+3 3 true
+4 4 true
+-----------------tests/mytestcase/delete/test5.txt------------
+2 2 true
+3 3 true
+4 4 true
+Print AVL in preorder
+3 3 true
+2 2 true
+4 4 true
+Print AVL in inorder
+2 2 true
+3 3 true
+4 4 true
+-----------------tests/mytestcase/delete/test6.txt------------
+2 2 true
+1 1 true
+0 0 true
+Print AVL in preorder
+1 1 true
+0 0 true
+2 2 true
+Print AVL in inorder
+0 0 true
+1 1 true
+2 2 true
+-----------------tests/mytestcase/delete/test7.txt------------
+2 2 true
+1 1 true
+0 0 true
+5 5 true
+Print AVL in preorder
+1 1 true
+0 0 true
+2 2 true
+5 5 true
+Print AVL in inorder
+0 0 true
+1 1 true
+2 2 true
+5 5 true
+-----------------tests/mytestcase/delete/test8.txt------------
+3 3 true
+1 1 true
+0 0 true
+5 5 true
+Print AVL in preorder
+1 1 true
+0 0 true
+3 3 true
+5 5 true
+Print AVL in inorder
+0 0 true
+1 1 true
+3 3 true
+5 5 true
+-----------------tests/mytestcase/delete/test9.txt------------
+1 1 true
+3 3 true
+4 4 true
+5 5 true
+Print AVL in preorder
+3 3 true
+1 1 true
+4 4 true
+5 5 true
+Print AVL in inorder
+1 1 true
+3 3 true
+4 4 true
+5 5 true
+-----------------tests/mytestcase/delete/test10.txt------------
+2 2 true
+6 6 true
+3 3 true
+7 7 true
+Print AVL in preorder
+3 3 true
+2 2 true
+6 6 true
+7 7 true
+Print AVL in inorder
+2 2 true
+3 3 true
+6 6 true
+7 7 true
+-----------------tests/mytestcase/delete/test11.txt------------
+3 3 true
+6 6 true
+3 3 true
+7 7 true
+Print AVL in preorder
+3 3 true
+3 3 true
+6 6 true
+7 7 true
+Print AVL in inorder
+3 3 true
+3 3 true
+6 6 true
+7 7 true
+-----------------tests/mytestcase/delete/test12.txt------------
+2 2 true
+3 3 true
+4 4 true
+5 5 true
+Print AVL in preorder
+3 3 true
+2 2 true
+4 4 true
+5 5 true
+Print AVL in inorder
+2 2 true
+3 3 true
+4 4 true
+5 5 true
+-----------------tests/mytestcase/delete/test13.txt------------
+2 2 true
+1 1 true
+0 0 true
+5 5 true
+Print AVL in preorder
+1 1 true
+0 0 true
+2 2 true
+5 5 true
+Print AVL in inorder
+0 0 true
+1 1 true
+2 2 true
+5 5 true
+-----------------tests/mytestcase/delete/test14.txt------------
+3 3 true
+5 5 true
+4 4 true
+6 6 true
+Print AVL in preorder
+4 4 true
+3 3 true
+5 5 true
+6 6 true
+Print AVL in inorder
+3 3 true
+4 4 true
+5 5 true
+6 6 true
+-----------------tests/mytestcase/delete/test15.txt------------
+10 10 true
+5 5 true
+2 2 true
+6 6 true
+20 20 true
+Print AVL in preorder
+5 5 true
+2 2 true
+10 10 true
+6 6 true
+20 20 true
+Print AVL in inorder
+2 2 true
+5 5 true
+6 6 true
+10 10 true
+20 20 true
+-----------------tests/mytestcase/delete/test16.txt------------
+10 10 true
+15 15 true
+12 12 true
+16 16 true
+8 8 true
+Print AVL in preorder
+15 15 true
+10 10 true
+8 8 true
+12 12 true
+16 16 true
+Print AVL in inorder
+8 8 true
+10 10 true
+12 12 true
+15 15 true
+16 16 true
+-----------------tests/mytestcase/delete/test17.txt------------
+15 15 true
+10 10 true
+25 25 true
+3 3 true
+11 11 true
+12 12 true
+30 30 true
+Print AVL in preorder
+11 11 true
+10 10 true
+3 3 true
+15 15 true
+12 12 true
+25 25 true
+30 30 true
+Print AVL in inorder
+3 3 true
+10 10 true
+11 11 true
+12 12 true
+15 15 true
+25 25 true
+30 30 true
+-----------------tests/mytestcase/delete/test18.txt------------
+15 15 true
+25 25 true
+30 30 true
+10 10 true
+15 15 true
+15 15 true
+35 35 true
+Print AVL in preorder
+15 15 true
+15 15 true
+10 10 true
+25 25 true
+15 15 true
+30 30 true
+35 35 true
+Print AVL in inorder
+10 10 true
+15 15 true
+15 15 true
+15 15 true
+25 25 true
+30 30 true
+35 35 true
+-----------------tests/mytestcase/delete/test19.txt------------
+10 10 true
+30 30 true
+5 5 true
+35 35 true
+25 25 true
+21 21 true
+40 40 true
+Print AVL in preorder
+21 21 true
+10 10 true
+5 5 true
+30 30 true
+25 25 true
+35 35 true
+40 40 true
+Print AVL in inorder
+5 5 true
+10 10 true
+21 21 true
+25 25 true
+30 30 true
+35 35 true
+40 40 true
+-----------------tests/mytestcase/delete/test20.txt------------
+20 20 true
+10 10 true
+40 40 true
+5 5 true
+15 15 true
+12 12 true
+50 50 true
+Print AVL in preorder
+15 15 true
+10 10 true
+5 5 true
+12 12 true
+40 40 true
+20 20 true
+50 50 true
+Print AVL in inorder
+5 5 true
+10 10 true
+12 12 true
+15 15 true
+20 20 true
+40 40 true
+50 50 true
+-----------------tests/mytestcase/delete/test21.txt------------
+5 5 true
+30 30 true
+2 2 true
+40 40 true
+25 25 true
+27 27 true
+35 35 true
+Print AVL in preorder
+25 25 true
+5 5 true
+2 2 true
+30 30 true
+27 27 true
+40 40 true
+35 35 true
+Print AVL in inorder
+2 2 true
+5 5 true
+25 25 true
+27 27 true
+30 30 true
+35 35 true
+40 40 true
+-----------------tests/mytestcase/delete/test22.txt------------
+10 10 true
+5 5 true
+25 25 true
+7 7 true
+3 3 true
+1 1 true
+30 30 true
+Print AVL in preorder
+5 5 true
+3 3 true
+1 1 true
+10 10 true
+7 7 true
+25 25 true
+30 30 true
+Print AVL in inorder
+1 1 true
+3 3 true
+5 5 true
+7 7 true
+10 10 true
+25 25 true
+30 30 true
+-----------------tests/mytestcase/delete/test23.txt------------
+10 10 true
+30 30 true
+5 5 true
+25 25 true
+35 35 true
+40 40 true
+50 50 true
+Print AVL in preorder
+25 25 true
+10 10 true
+5 5 true
+35 35 true
+30 30 true
+40 40 true
+50 50 true
+Print AVL in inorder
+5 5 true
+10 10 true
+25 25 true
+30 30 true
+35 35 true
+40 40 true
+50 50 true
+-----------------tests/mytestcase/delete/test24.txt------------
+40 40 true
+20 20 true
+50 50 true
+20 20 true
+10 true true
+20 20 true
+20 20 true
+60 60 true
+Print AVL in preorder
+20 20 true
+20 20 true
+10 true true
+20 20 true
+40 40 true
+20 20 true
+50 50 true
+60 60 true
+Print AVL in inorder
+10 true true
+20 20 true
+20 20 true
+20 20 true
+20 20 true
+40 40 true
+50 50 true
+60 60 true

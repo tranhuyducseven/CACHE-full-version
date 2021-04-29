@@ -1,0 +1,774 @@
+---------------test 1----------
+12
+20
+20
+30
+Print queue
+0 25 false
+1 24 true
+3 20 false
+11 24 true
+9 22 false
+2 24 true
+4 20 true
+10 30 false
+5 40 false
+7 30 false
+8 12 false
+6 42 false
+Print AVL in inorder
+0 25 false
+1 24 true
+2 24 true
+3 20 false
+4 20 true
+5 40 false
+6 42 false
+7 30 false
+8 12 false
+9 22 false
+10 30 false
+11 24 true
+Print AVL in preorder
+5 40 false
+3 20 false
+1 24 true
+0 25 false
+2 24 true
+4 20 true
+9 22 false
+7 30 false
+6 42 false
+8 12 false
+11 24 true
+10 30 false
+
+---------------test 2----------
+12
+20
+Print queue
+0 25 false
+1 24 true
+2 24 true
+3 20 false
+4 20 true
+5 40 false
+6 42 false
+7 30 false
+8 12 false
+9 22 false
+10 30 false
+11 24 true
+Print AVL in inorder
+0 25 false
+1 24 true
+2 24 true
+3 20 false
+4 20 true
+5 40 false
+6 42 false
+7 30 false
+8 12 false
+9 22 false
+10 30 false
+11 24 true
+Print AVL in preorder
+7 30 false
+3 20 false
+1 24 true
+0 25 false
+2 24 true
+5 40 false
+4 20 true
+6 42 false
+9 22 false
+8 12 false
+10 30 false
+11 24 true
+
+---------------test 3----------
+12
+20
+Print queue
+3 20 false
+4 20 true
+5 40 false
+6 42 false
+7 30 false
+8 12 false
+9 22 false
+10 30 false
+11 24 true
+12 23 false
+14 25 false
+15 26 false
+13 22 false
+0 10 true
+16 2 false
+Print AVL in inorder
+0 10 true
+3 20 false
+4 20 true
+5 40 false
+6 42 false
+7 30 false
+8 12 false
+9 22 false
+10 30 false
+11 24 true
+12 23 false
+13 22 false
+14 25 false
+15 26 false
+16 2 false
+Print AVL in preorder
+7 30 false
+3 20 false
+0 10 true
+5 40 false
+4 20 true
+6 42 false
+11 24 true
+9 22 false
+8 12 false
+10 30 false
+14 25 false
+12 23 false
+13 22 false
+15 26 false
+16 2 false
+
+---------------test 4----------
+Print queue
+10 10 true
+5 5 true
+2 2 true
+Print AVL in preorder
+5 5 true
+2 2 true
+10 10 true
+Print AVL in inorder
+2 2 true
+5 5 true
+10 10 true
+
+---------------test 5----------
+Print queue
+10 10 true
+15 5 true
+20 2 true
+Print AVL in preorder
+15 5 true
+10 10 true
+20 2 true
+Print AVL in inorder
+10 10 true
+15 5 true
+20 2 true
+
+---------------test 6----------
+Print queue
+10 10 true
+5 5 true
+8 8 true
+Print AVL in preorder
+8 8 true
+5 5 true
+10 10 true
+Print AVL in inorder
+5 5 true
+8 8 true
+10 10 true
+
+---------------test 7----------
+Print queue
+10 10 true
+15 15 true
+12 12 true
+Print AVL in preorder
+12 12 true
+10 10 true
+15 15 true
+Print AVL in inorder
+10 10 true
+12 12 true
+15 15 true
+
+---------------test 8----------
+Print queue
+10 10 true
+15 15 true
+7 7 true
+4 4 true
+2 2 true
+Print AVL in preorder
+10 10 true
+4 4 true
+2 2 true
+7 7 true
+15 15 true
+Print AVL in inorder
+2 2 true
+4 4 true
+7 7 true
+10 10 true
+15 15 true
+
+---------------test 9----------
+Print queue
+10 10 true
+15 15 true
+7 7 true
+5 5 true
+6 6 true
+Print AVL in preorder
+10 10 true
+6 6 true
+5 5 true
+7 7 true
+15 15 true
+Print AVL in inorder
+5 5 true
+6 6 true
+7 7 true
+10 10 true
+15 15 true
+
+---------------test 10----------
+Print queue
+15 15 true
+10 10 true
+20 20 true
+25 25 true
+22 22 true
+Print AVL in preorder
+15 15 true
+10 10 true
+22 22 true
+20 20 true
+25 25 true
+Print AVL in inorder
+10 10 true
+15 15 true
+20 20 true
+22 22 true
+25 25 true
+
+---------------test 11----------
+Print queue
+15 15 true
+10 10 true
+20 20 true
+25 25 true
+30 30 true
+Print AVL in preorder
+15 15 true
+10 10 true
+25 25 true
+20 20 true
+30 30 true
+Print AVL in inorder
+10 10 true
+15 15 true
+20 20 true
+25 25 true
+30 30 true
+
+---------------test 12----------
+Print queue
+15 15 true
+20 20 true
+7 7 true
+10 10 true
+4 4 true
+2 2 true
+Print AVL in preorder
+7 7 true
+4 4 true
+2 2 true
+15 15 true
+10 10 true
+20 20 true
+Print AVL in inorder
+2 2 true
+4 4 true
+7 7 true
+10 10 true
+15 15 true
+20 20 true
+
+---------------test 13----------
+Print queue
+15 15 true
+20 20 true
+7 7 true
+3 3 true
+8 8 true
+5 5 true
+Print AVL in preorder
+7 7 true
+3 3 true
+5 5 true
+15 15 true
+8 8 true
+20 20 true
+Print AVL in inorder
+3 3 true
+5 5 true
+7 7 true
+8 8 true
+15 15 true
+20 20 true
+
+---------------test 14----------
+Print queue
+20 20 true
+10 10 true
+30 30 true
+25 25 true
+40 40 true
+35 35 true
+Print AVL in preorder
+30 30 true
+20 20 true
+10 10 true
+25 25 true
+40 40 true
+35 35 true
+Print AVL in inorder
+10 10 true
+20 20 true
+25 25 true
+30 30 true
+35 35 true
+40 40 true
+
+---------------test 15----------
+Print queue
+20 20 true
+10 10 true
+30 30 true
+15 15 true
+40 40 true
+50 50 true
+Print AVL in preorder
+20 20 true
+10 10 true
+15 15 true
+40 40 true
+30 30 true
+50 50 true
+Print AVL in inorder
+10 10 true
+15 15 true
+20 20 true
+30 30 true
+40 40 true
+50 50 true
+
+---------------test 16----------
+Print queue
+20 20 true
+25 25 true
+10 10 true
+15 15 true
+17 17 true
+Print AVL in preorder
+20 20 true
+15 15 true
+10 10 true
+17 17 true
+25 25 true
+Print AVL in inorder
+10 10 true
+15 15 true
+17 17 true
+20 20 true
+25 25 true
+
+---------------test 17----------
+Print queue
+20 20 true
+25 25 true
+10 10 true
+15 15 true
+12 12 true
+Print AVL in preorder
+20 20 true
+12 12 true
+10 10 true
+15 15 true
+25 25 true
+Print AVL in inorder
+10 10 true
+12 12 true
+15 15 true
+20 20 true
+25 25 true
+
+---------------test 18----------
+Print queue
+40 40 true
+45 45 true
+20 20 true
+50 50 true
+30 30 true
+10 10 true
+35 35 true
+32 32 true
+5 5 true
+37 37 true
+Print AVL in preorder
+32 32 true
+20 20 true
+10 10 true
+5 5 true
+30 30 true
+40 40 true
+35 35 true
+37 37 true
+45 45 true
+50 50 true
+Print AVL in inorder
+5 5 true
+10 10 true
+20 20 true
+30 30 true
+32 32 true
+35 35 true
+37 37 true
+40 40 true
+45 45 true
+50 50 true
+
+---------------test 19----------
+Print queue
+40 40 true
+45 45 true
+20 20 true
+50 50 true
+30 30 true
+10 10 true
+35 35 true
+32 32 true
+5 5 true
+15 15 true
+2 2 true
+Print AVL in preorder
+20 20 true
+10 10 true
+5 5 true
+2 2 true
+15 15 true
+40 40 true
+32 32 true
+30 30 true
+35 35 true
+45 45 true
+50 50 true
+Print AVL in inorder
+2 2 true
+5 5 true
+10 10 true
+15 15 true
+20 20 true
+30 30 true
+32 32 true
+35 35 true
+40 40 true
+45 45 true
+50 50 true
+
+---------------test 20----------
+Print queue
+40 20 true
+45 10 false
+20 20 true
+50 50 true
+30 30 true
+20 1 true
+10 2 false
+35 35 true
+1 30 false
+32 32 true
+5 5 true
+15 15 true
+2 2 true
+9 2 true
+8 7 true
+Print AVL in preorder
+30 30 true
+10 2 false
+2 2 true
+1 30 false
+8 7 true
+5 5 true
+9 2 true
+20 20 true
+15 15 true
+20 1 true
+40 40 true
+35 35 true
+32 32 true
+45 10 false
+50 50 true
+Print AVL in inorder
+1 30 false
+2 2 true
+5 5 true
+8 7 true
+9 2 true
+10 2 false
+15 15 true
+20 20 true
+20 1 true
+30 30 true
+32 32 true
+35 35 true
+40 40 true
+45 10 false
+50 50 true
+
+---------------test 21----------
+Print queue
+5 30 true
+6 10 true
+7 35 true
+8 32 true
+9 5 true
+10 15 true
+11 2 true
+12 12 false
+13 100 false
+14 8 false
+15 9 false
+16 10 false
+17 34 false
+18 9 false
+19 3 false
+Print AVL in preorder
+12 12 false
+8 32 true
+6 10 true
+5 30 true
+7 35 true
+10 15 true
+9 5 true
+11 2 true
+16 10 false
+14 8 false
+13 100 false
+15 9 false
+18 9 false
+17 34 false
+19 3 false
+Print AVL in inorder
+5 30 true
+6 10 true
+7 35 true
+8 32 true
+9 5 true
+10 15 true
+11 2 true
+12 12 false
+13 100 false
+14 8 false
+15 9 false
+16 10 false
+17 34 false
+18 9 false
+19 3 false
+
+---------------test 22----------
+3
+Print queue
+5 30 true
+6 10 true
+7 5 true
+19 3 false
+8 32 true
+9 5 true
+10 15 true
+11 2 true
+12 3 true
+13 20 true
+14 8 true
+15 9 false
+16 18 true
+17 2 true
+18 3 true
+Print AVL in preorder
+12 3 true
+8 32 true
+6 10 true
+5 30 true
+7 5 true
+10 15 true
+9 5 true
+11 2 true
+16 10 false
+14 8 true
+13 20 true
+15 9 false
+18 9 false
+17 34 false
+19 3 false
+Print AVL in inorder
+5 30 true
+6 10 true
+7 5 true
+8 32 true
+9 5 true
+10 15 true
+11 2 true
+12 12 false
+13 100 false
+14 8 false
+15 9 false
+16 10 false
+17 34 false
+18 9 false
+19 3 false
+
+---------------test 23----------
+10
+20
+10
+12
+12
+Print queue
+15 12 false
+10 10 true
+20 20 true
+25 25 true
+22 22 true
+4 5 false
+8 30 false
+9 8 true
+5 12 true
+Print AVL in preorder
+15 12 false
+8 30 false
+4 5 false
+5 12 true
+10 10 true
+9 8 true
+22 22 true
+20 20 true
+25 25 true
+100 12 true
+Print AVL in inorder
+4 5 false
+5 12 true
+8 30 false
+8 12 true
+9 8 true
+10 10 true
+15 12 false
+20 20 true
+22 22 true
+25 25 true
+100 12 true
+---------------test 24----------
+2
+Print queue
+10 3 true
+2 5 true
+9 4 true
+3 7 true
+8 4 false
+20 4 true
+4 4 true
+5 999 true
+11 11 false
+12 12 false
+13 13 false
+14 14 false
+15 15 false
+16 16 false
+17 17 false
+5
+Print AVL in preorder
+9 4 true
+3 7 true
+2 5 true
+1 10 true
+5 999 true
+4 4 true
+8 4 false
+13 13 false
+11 11 false
+12 12 false
+15 15 false
+14 14 false
+17 17 false
+16 16 false
+20 4 true
+Print AVL in inorder
+1 10 true
+2 5 true
+3 7 true
+4 4 true
+5 999 true
+8 4 false
+9 4 true
+11 11 false
+12 12 false
+13 13 false
+14 14 false
+15 15 false
+16 16 false
+17 17 false
+20 4 true
+
+---------------test 25----------
+Print queue
+2 5 true
+9 4 true
+3 7 true
+8 4 false
+20 4 true
+4 4 true
+19 10 true
+5 999 true
+11 11 false
+12 12 false
+13 13 false
+14 14 false
+15 15 false
+16 16 false
+17 17 false
+Print AVL in preorder
+8 4 false
+3 7 true
+1 10 true
+2 3 true
+5 999 true
+4 4 true
+15 18 false
+12 12 false
+11 11 false
+14 14 false
+13 13 false
+19 10 true
+16 20 false
+17 3 false
+20 4 true
+10
+4
+Print AVL in inorder
+1 10 true
+2 3 true
+3 7 true
+4 4 true
+5 999 true
+8 4 false
+11 11 false
+12 12 false
+13 13 false
+14 14 false
+15 18 false
+16 20 false
+17 3 false
+19 10 true
+20 4 true

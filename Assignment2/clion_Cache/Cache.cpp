@@ -109,7 +109,7 @@ TreeNode *AVLTree::deleteNode(TreeNode *root, int val) {
             TreeNode *temp = root->right;
             while (temp->left != nullptr)
                 temp = temp->left;
-            root->ele->addr = temp->ele->addr;
+            root->ele = temp->ele;
             root->right = deleteNode(root->right, temp->ele->addr);
         }
     }
@@ -223,4 +223,4 @@ void Cache::inOrderAVL(TreeNode *root) {
         inOrderAVL(root->right);
     }
 }
-//12:53 AM
+//23:12

@@ -1,0 +1,3 @@
+/media/D/Learning/HCMUT/DSA/Code/midTerm/deBug/cmake-build-debug/CMakeFiles/edit_cache.dir
+/media/D/Learning/HCMUT/DSA/Code/midTerm/deBug/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/media/D/Learning/HCMUT/DSA/Code/midTerm/deBug/cmake-build-debug/CMakeFiles/deBug.dir

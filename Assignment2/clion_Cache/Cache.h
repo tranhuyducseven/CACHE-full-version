@@ -3,46 +3,56 @@
 
 #include "main.h"
 
-class TreeNode {
+class Node {
 public:
     Elem *ele;
-    TreeNode *left;
-    TreeNode *right;
+    Node *left;
+    Node *right;
+    int balance;
 
-    TreeNode() : ele(nullptr), left(nullptr), right(nullptr) {};
+    Node() : ele(nullptr), left(nullptr), right(nullptr), balance(0) {};
 
-    TreeNode(Elem *val) : ele(val), left(nullptr), right(nullptr) {};
+    Node(Elem *&val) : ele(val), left(nullptr), right(nullptr), balance(0) {};
 };
 
-class AVLTree {
+class AVL {
 public:
-    TreeNode *ROOT;
-public:
-    AVLTree() : ROOT(nullptr) {};
+    AVL() : root(nullptr) {};
+    Node *root;
 
-    int getHeight(TreeNode *r);
+    Node *rotateRight(Node *&);
 
-    int getBalanceFactor(TreeNode *r);
+    Node *rotateLeft(Node *&);
 
-    TreeNode *rightRotate(TreeNode *r);
+    Node *leftBalance(Node *&, bool &);
 
-    TreeNode *leftRotate(TreeNode *r);
+    Node *rightBalance(Node *&node, bool &taller);
 
-    TreeNode *insert(TreeNode *root, Elem *temp);
+    Node *removeLeftBalance(Node *&, bool &);
 
-    void removeSubTree(TreeNode *Ptr);
+    Node *removeRightBalance(Node *&, bool &);
 
-    TreeNode *recursiveSearch(TreeNode *root, int val);
+    void removeSubTree(Node *);
 
-    TreeNode *deleteNode(TreeNode *, int);
+    Node *recursiveSearch(Node *root, int val);
 
-    ~AVLTree() { removeSubTree(this->ROOT); };
+    ~AVL() { removeSubTree(this->root); };
+
+    Node *insertRec(Node *&, Elem *&, bool &);
+
+    Node *removeRec(Node *&, const int &, bool &);
+
+    void insert(Elem *&);
+
+    void remove(const int &);
+
+
 };
 
 class Cache {
     Elem **arr;
     int p;
-    AVLTree obj;
+    AVL obj;
 
 public:
     Cache(int s) {
@@ -71,10 +81,12 @@ public:
 
     void inOrder();
 
-    void preOrderAVL(TreeNode *);
+    void preOrderAVL(Node *);
 
-    void inOrderAVL(TreeNode *);
+    void inOrderAVL(Node *);
+
+
 
 };
-//23:12
 #endif
+//20:21 4/5/2021

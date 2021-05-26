@@ -3,193 +3,377 @@
 
 #include "main.h"
 
-enum STATUS_TYPE {
-    NIL,
-    NON_EMPTY,
-    DELETED
+enum STATUS_TYPE
+{
+    NIL, NON_EMPTY, DELETED
 };
 
-class Node {
+class Node
+{
 public:
     Node *next;
     Node *prev;
     Elem *elem;
 
-    Node() : next(nullptr), prev(nullptr), elem(nullptr) {};
+    Node ()
+    {
+        this->next = nullptr;
+        this->prev = nullptr;
+        this->elem = nullptr;
+    }
 
-    explicit Node(Elem *e) : next(nullptr), prev(nullptr), elem(e) {};
+    explicit Node (Elem *e)
+    {
+        this->next = nullptr;
+        this->prev = nullptr;
+        this->elem = e;
+    }
 };
 
-class OpenAddressingHash {
+class OpenAddressingHash
+{
 private:
     STATUS_TYPE *status;
     Node **data;
     int size;
+
 public:
-    OpenAddressingHash(int size) {
+    OpenAddressingHash (int size)
+    {
         this->size = size;
         this->data = new Node *[size];
+        for (int i = 0; i < size; i++)
+        {
+            data[i] = nullptr;
+        }
         this->status = new STATUS_TYPE[size];
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < size; i++)
+        {
             this->status[i] = NIL;
         }
     }
 
+    int hashFunction (int, int) const;
 
-    int hashFunction(int, int) const;
+    int insertKey (Node *);
 
-    int insertKey(Node *);
+    int searchKey (int);
 
-    int searchKey(int);
+    void removeKey (int);
 
-    void removeKey(int);
+    Node *getNodeContainKey (int);
 
-    Node *getNodeContainKey(int);
-
-    ~OpenAddressingHash() {
-        for (int i = 0; i < this->size; i++) {
+    ~OpenAddressingHash ()
+    {
+        for (int i = 0; i < this->size; i++)
+        {
             delete this->data[i]->elem;
             delete this->data[i];
         }
         delete[] this->data;
         delete[] this->status;
     }
-
 };
 
-
-class ReplacementPolicy {
+class ReplacementPolicy
+{
 protected:
-    int count;
+    int count = 0;
 public:
-    virtual void insert(Elem *) = 0;
+    virtual void insert (Elem *) = 0;
 
-    virtual Elem *get(int) = 0;
+    virtual Elem *get (int) = 0;
 
-    virtual void remove() = 0;
+    virtual void remove () = 0;
 
-    virtual void print() = 0;
-
-    virtual void replace(Elem *e, int key) = 0;
+    virtual void print () = 0;
 };
 
-class SearchEngine {
+class SearchEngine
+{
 public:
-    virtual int search(int key) = 0; // -1 if not found
-    virtual void insert(int key, int idx) = 0;
+    virtual int search (Elem *) = 0; // -1 if not found
 
-    virtual void deleteNode(int key) = 0;
+    virtual void insert (Elem *) = 0;
 
-    virtual void print(ReplacementPolicy *r) = 0;
+    virtual void deleteNode (Elem *) = 0;
+
+    virtual void print () = 0;
 };
 
-class FIFO : public ReplacementPolicy {
+class FIFO : public ReplacementPolicy
+{
 private:
     Elem **arr;
 public:
-    FIFO() {
-        this->count = 0;
+    FIFO ()
+    {
         this->arr = new Elem *[MAXSIZE];
+        for (int i = 0; i < MAXSIZE; i++)
+            this->arr[i] = nullptr;
     }
 
-    ~FIFO() {
-        for (int i = 0; i < MAXSIZE; i++) {
-            delete arr[i];
+    ~FIFO ()
+    {
+        for (int i = 0; i < MAXSIZE; i++)
+        {
+            if (this->arr[i] != nullptr)
+                delete arr[i];
         }
         delete[] arr;
+        this->count = 0;
     }
 
-    int insert(Elem *e, int idx) { return 0; }
+    void insert (Elem *e);
 
-    void access(int idx) {}
+    Elem *get (int);
 
-    void print() {}
+    void remove ();
+
+
+    void print ();
+
 };
 
-class MRU : public ReplacementPolicy {
+class MRU : public ReplacementPolicy
+{
 protected:
     Node *head;
     Node *tail;
     OpenAddressingHash *hash;
+
 public:
-    MRU() {
-        this->count = 0;
+    MRU ()
+    {
         this->head = nullptr;
         this->tail = nullptr;
         this->hash = new OpenAddressingHash(MAXSIZE);
     };
 
-    ~MRU() {
+    ~MRU ()
+    {
         delete this->hash;
+        this->count = 0;
     };
 
-    void putOnTop(Node *);
+    void putOnTop (Node *);
 
-    void removeNode(Node *);
+    void removeNode (Node *);
 
-    void insert(Elem *);
+    void insert (Elem *);
 
-    void remove() {
-        this->removeNode(this->head);
+    void remove ();
+
+    Elem *get (int);
+
+    void print ();
+};
+
+class LRU : public MRU
+{
+public:
+    void remove () override;
+};
+
+class ElementHeap
+{
+public:
+    Elem *elem;
+    int freq;
+
+    ElementHeap ()
+    {
+        this->freq = 0;
+        this->elem = nullptr;
     }
 
-    Elem *get(int);
-
-    void replace(int, Elem *);
-
-    void print();
-
+    explicit ElementHeap (Elem *e)
+    {
+        this->freq = 0;
+        this->elem = e;
+    }
 
 };
 
-class LRU : public MRU {
+class MinHeap
+{
+
+private:
+    ElementHeap **data;
+    int size;
 public:
-    void remove() override;
+    MinHeap ()
+    {
+        this->data = new ElementHeap *[MAXSIZE];
+        for (int i = 0; i < MAXSIZE; i++)
+        {
+            this->data[i] = nullptr;
+        }
+        this->size = 0;
+    }
+
+    ~MinHeap ()
+    {
+        for (int i = 0; i < MAXSIZE; i++)
+        {
+            if (data[i] != nullptr)
+            {
+                delete this->data[i]->elem;
+                delete this->data[i];
+            }
+        }
+        delete[] this->data;
+        this->size = 0;
+    }
+
+    void reHeapUp (int index);
+
+    void reHeapDown (int index);
+
+    void insert (ElementHeap *ele);
+
+    Elem *get (int);
+
+    void remove ();
+
+    void print ();
 };
 
-class LFU : public ReplacementPolicy {
+class LFU : public ReplacementPolicy
+{
+private:
+    MinHeap *heap;
 public:
-    LFU() {}
+    LFU ()
+    {
+        this->heap = new MinHeap();
+    }
 
-    ~LFU() {}
+    ~LFU ()
+    {
+        delete this->heap;
+    }
 
-    int insert(Elem *e);
+    void insert (Elem *);
 
-    void access(int idx) {}
+    Elem *get (int);
 
-    int remove() { return 0; }
+    void remove ();
 
-    void print() {}
+    void print ();
+
 };
 
-class DBHashing : public SearchEngine {
+
+class DBHashing : public SearchEngine
+{
+private:
+    int (*h1) (int);
+
+    int (*h2) (int);
+
+    int size;
+
+    STATUS_TYPE *status;
+
+    Elem **arr;
+
 public:
-    DBHashing(int (*h1)(int), int (*h2)(int), int s) {}
+    DBHashing (int (*h1) (int), int (*h2) (int), int s)
+    {
+        this->h1 = h1;
+        this->h2 = h2;
+        this->size = s;
+        this->arr = new Elem *[this->size];
+        for (int i = 0; i < this->size; i++)
+        {
+            this->arr[i] = nullptr;
+        }
+        this->status = new STATUS_TYPE[this->size];
+        for (int i = 0; i < this->size; i++)
+        {
+            this->status[i] = NIL;
+        }
+    }
 
-    ~DBHashing() {}
+    ~DBHashing ()
+    {
+        for (int i = 0; i < this->size; i++)
+        {
+            delete this->arr[i];
+        }
+        delete[] this->arr;
+        delete this->status;
+    };
 
-    void insert(int key, int i) {}
+    void insert (Elem *);
 
-    void deleteNode(int key) {}
+    void deleteNode (Elem *);
 
-    void print(ReplacementPolicy *q) {}
+    void print ();
 
-    int search(int key) { return 0; }
+    int search (Elem *);
 };
 
-class AVL : public SearchEngine {
+class Tree
+{
 public:
-    AVL() {}
+    Elem *ele;
+    Tree *left;
+    Tree *right;
+    int balance;
 
-    ~AVL() {}
+    Tree () : ele(nullptr), left(nullptr), right(nullptr), balance(0)
+    {};
 
-    void insert(int key, int i) {}
-
-    void deleteNode(int key) {}
-
-    void print(ReplacementPolicy *q) {}
-
-    int search(int key) { return 0; }
+    Tree (Elem *&val) : ele(val), left(nullptr), right(nullptr), balance(0)
+    {};
 };
+
+class AVL : public SearchEngine
+{
+public:
+    Tree *root;
+
+    AVL () : root(nullptr)
+    {};
+
+    Tree *rotateRight (Tree *&);
+
+    Tree *rotateLeft (Tree *&);
+
+    Tree *leftBalance (Tree *&, bool &);
+
+    Tree *rightBalance (Tree *&Tree, bool &taller);
+
+    Tree *removeLeftBalance (Tree *&, bool &);
+
+    Tree *removeRightBalance (Tree *&, bool &);
+
+    void removeSubTree (Tree *);
+
+    Tree *recursiveSearch (Tree *root, int val);
+
+    Tree *insertRec (Tree *&, Elem *&, bool &);
+
+    Tree *removeRec (Tree *&, const int &, bool &);
+
+    void printLNR ();
+
+    void printNLR ();
+
+    int search (Elem *) = 0; // -1 if not found
+
+    void insert (Elem *);
+
+    void deleteNode (Elem *);
+
+    void print ();
+
+    ~AVL ()
+    { removeSubTree(this->root); };
+
+};
+
 
 #endif

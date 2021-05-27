@@ -3,6 +3,60 @@
 
 #include "main.h"
 
+class ReplacementPolicy
+{
+protected:
+    int count = 0;
+public:
+
+    virtual void access (int) = 0;
+
+    virtual void insert (Elem *) = 0;
+
+    virtual void remove () = 0;
+
+    virtual void print () = 0;
+
+    virtual ~ReplacementPolicy () = 0;
+};
+
+
+class FIFO : public ReplacementPolicy
+{
+private:
+    Elem **arr;
+public:
+    FIFO ()
+    {
+        this->arr = new Elem *[MAXSIZE];
+        for (int i = 0; i < MAXSIZE; i++)
+            this->arr[i] = nullptr;
+    }
+
+    ~FIFO ()
+    {
+        for (int i = 0; i < MAXSIZE; i++)
+        {
+            if (this->arr[i] != nullptr)
+                delete arr[i];
+        }
+        delete[] arr;
+        this->count = 0;
+    }
+
+    void access (int);
+
+    void insert (Elem *e);
+
+    Elem *get (int);
+
+    void remove ();
+
+
+    void print ();
+
+};
+
 enum STATUS_TYPE
 {
     NIL, NON_EMPTY, DELETED
@@ -75,66 +129,6 @@ public:
     }
 };
 
-class ReplacementPolicy
-{
-protected:
-    int count = 0;
-public:
-    virtual void insert (Elem *) = 0;
-
-    virtual Elem *get (int) = 0;
-
-    virtual void remove () = 0;
-
-    virtual void print () = 0;
-};
-
-class SearchEngine
-{
-public:
-    virtual int search (Elem *) = 0; // -1 if not found
-
-    virtual void insert (Elem *) = 0;
-
-    virtual void deleteNode (Elem *) = 0;
-
-    virtual void print () = 0;
-};
-
-class FIFO : public ReplacementPolicy
-{
-private:
-    Elem **arr;
-public:
-    FIFO ()
-    {
-        this->arr = new Elem *[MAXSIZE];
-        for (int i = 0; i < MAXSIZE; i++)
-            this->arr[i] = nullptr;
-    }
-
-    ~FIFO ()
-    {
-        for (int i = 0; i < MAXSIZE; i++)
-        {
-            if (this->arr[i] != nullptr)
-                delete arr[i];
-        }
-        delete[] arr;
-        this->count = 0;
-    }
-
-    void insert (Elem *e);
-
-    Elem *get (int);
-
-    void remove ();
-
-
-    void print ();
-
-};
-
 class MRU : public ReplacementPolicy
 {
 protected:
@@ -160,11 +154,11 @@ public:
 
     void removeNode (Node *);
 
+    void access(int);
+
     void insert (Elem *);
 
     void remove ();
-
-    Elem *get (int);
 
     void print ();
 };
@@ -183,13 +177,13 @@ public:
 
     ElementHeap ()
     {
-        this->freq = 0;
+        this->freq = 1;
         this->elem = nullptr;
     }
 
-    explicit ElementHeap (Elem *e)
+     ElementHeap (Elem *e)
     {
-        this->freq = 0;
+        this->freq = 1;
         this->elem = e;
     }
 
@@ -202,14 +196,14 @@ private:
     ElementHeap **data;
     int size;
 public:
-    MinHeap ()
+    MinHeap (int size)
     {
         this->data = new ElementHeap *[MAXSIZE];
         for (int i = 0; i < MAXSIZE; i++)
         {
             this->data[i] = nullptr;
         }
-        this->size = 0;
+        this->size = size;
     }
 
     ~MinHeap ()
@@ -230,7 +224,7 @@ public:
 
     void reHeapDown (int index);
 
-    void insert (ElementHeap *ele);
+    void insertHeap (ElementHeap *ele);
 
     Elem *get (int);
 
@@ -246,7 +240,7 @@ private:
 public:
     LFU ()
     {
-        this->heap = new MinHeap();
+        this->heap = new MinHeap(this->count);
     }
 
     ~LFU ()
@@ -256,7 +250,7 @@ public:
 
     void insert (Elem *);
 
-    Elem *get (int);
+    void access (int);
 
     void remove ();
 
@@ -264,6 +258,19 @@ public:
 
 };
 
+class SearchEngine
+{
+public:
+    virtual Elem *search (int) = 0; // -1 if not found
+
+    virtual void insert (Elem *) = 0;
+
+    virtual void deleteNode (int) = 0;
+
+    virtual void print () = 0;
+
+    virtual ~SearchEngine () = 0;
+};
 
 class DBHashing : public SearchEngine
 {
@@ -306,13 +313,15 @@ public:
         delete this->status;
     };
 
+    int searchHashing (int);
+
     void insert (Elem *);
 
-    void deleteNode (Elem *);
+    void deleteNode (int);
 
     void print ();
 
-    int search (Elem *);
+    Elem *search (int);
 };
 
 class Tree
@@ -358,15 +367,15 @@ public:
 
     Tree *removeRec (Tree *&, const int &, bool &);
 
-    void printLNR ();
+    void inOrderAVL (Tree *);
 
-    void printNLR ();
+    void preOrderAVL (Tree *);
 
-    int search (Elem *) = 0; // -1 if not found
+    Elem *search (int);
 
     void insert (Elem *);
 
-    void deleteNode (Elem *);
+    void deleteNode (int);
 
     void print ();
 

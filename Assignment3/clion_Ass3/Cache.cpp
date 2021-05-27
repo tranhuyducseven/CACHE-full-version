@@ -1,30 +1,45 @@
 #include "Cache.h"
 
+FIFO::FIFO ()
+{
+    this->arr = new Elem *[MAXSIZE];
+    for (int i = 0; i < MAXSIZE; i++)
+        this->arr[i] = nullptr;
+}
+
 void FIFO::access (int)
 {}
 
 void FIFO::insert (Elem *e)
 {
-    if (this->count == MAXSIZE)
-    {
-        this->remove();
-        this->arr[MAXSIZE - 1] = e;
-    }
-    else
-        this->arr[this->count++] = e;
+    this->arr[this->count++] = e;
 }
 
-void FIFO::remove ()
+int FIFO::remove ()
 {
+    int addr = this->arr[0]->addr;
     delete this->arr[0];
     for (int i = 0; i < MAXSIZE - 1; i++)
         this->arr[i] = this->arr[i + 1];
+    return addr;
 }
 
 void FIFO::print ()
 {
     for (int i = 0; i < this->count; i++)
         this->arr[i]->print();
+}
+
+FIFO::~FIFO ()
+{
+    for (int i = 0; i < MAXSIZE; i++)
+    {
+        if (this->arr[i] != nullptr)
+            delete arr[i];
+    }
+    delete[] arr;
+    this->count = 0;
+
 }
 
 // HashTable For MRU-LRU
@@ -94,6 +109,12 @@ Node *OpenAddressingHash::getNodeContainKey (int key)
 }
 
 // MRU
+MRU::MRU ()
+{
+    this->head = nullptr;
+    this->tail = nullptr;
+    this->hash = new OpenAddressingHash(MAXSIZE);
+}
 
 void MRU::putOnTop (Node *node)
 {
@@ -104,7 +125,7 @@ void MRU::putOnTop (Node *node)
     this->head = node;
     if (this->tail == nullptr)
         this->tail = node;
-};
+}
 
 void MRU::removeNode (Node *node)
 {
@@ -146,10 +167,12 @@ void MRU::access (int key)
     }
 }
 
-void MRU::remove ()
+int MRU::remove ()
 {
     this->hash->removeKey(this->head->elem->addr);
+    int addr = this->head->elem->addr;
     this->removeNode(this->head);
+    return addr;
 }
 
 void MRU::print ()
@@ -162,11 +185,18 @@ void MRU::print ()
     }
 }
 
+MRU::~MRU ()
+{
+    delete this->hash;
+    this->count = 0;
+}
 
-void LRU::remove ()
+int LRU::remove ()
 {
     this->hash->removeKey(this->tail->elem->addr);
+    int addr = this->tail->elem->addr;
     this->removeNode(this->tail);
+    return addr;
 }
 
 //LFU
@@ -211,9 +241,17 @@ void MinHeap::insertHeap (ElementHeap *ele)
     }
 }
 
-Elem *MinHeap::get (int key)
+void MinHeap::access (int addr)
 {
-    return this->data[key]->elem;
+    for (int i = 0; i < this->size; i++)
+    {
+        if (this->data[i]->elem->addr == addr)
+        {
+            this->data[i]->freq += 1;
+            this->reHeapDown(i);
+            break;
+        }
+    }
 }
 
 void MinHeap::print ()
@@ -225,30 +263,38 @@ void MinHeap::print ()
 }
 
 
-void MinHeap::remove ()
+int MinHeap::remove ()
 {
     if (this->size > 0)
     {
-        data[0] = data[size - 1];
-        size = size - 1;
+        int addr = this->data[0]->elem->addr;
+        data[0] = data[this->size - 1];
+        this->size = this->size - 1;
         reHeapDown(0);
+        return addr;
     }
+    return -1;
+}
+
+LFU::LFU ()
+{
+    this->heap = new MinHeap(this->count);
 }
 
 void LFU::insert (Elem *e)
 {
-    ElementHeap *tmp = new ElementHeap(e);
+    auto *tmp = new ElementHeap(e);
     this->heap->insertHeap(tmp);
 }
 
-void LFU::access (int key)
+void LFU::access (int addr)
 {
-
+    this->heap->access(addr);
 }
 
-void LFU::remove ()
+int LFU::remove ()
 {
-    this->heap->remove();
+    return this->heap->remove();
 }
 
 void LFU::print ()
@@ -256,13 +302,34 @@ void LFU::print ()
     this->heap->print();
 }
 
+LFU::~LFU ()
+{
+    this->heap = new MinHeap(this->count);
+}
+
+DBHashing::DBHashing (int (*h1) (int), int (*h2) (int), int s)
+{
+    this->h1 = h1;
+    this->h2 = h2;
+    this->size = s;
+    this->arr = new Elem *[this->size];
+    for (int i = 0; i < this->size; i++)
+    {
+        this->arr[i] = nullptr;
+    }
+    this->status = new STATUS_TYPE[this->size];
+    for (int i = 0; i < this->size; i++)
+    {
+        this->status[i] = NIL;
+    }
+}
 
 int DBHashing::searchHashing (int addr)
 {
     int index1 = this->h1(addr);
     int index2 = this->h2(addr);
     int i = 0;
-    int index = 0;
+    int index;
     do
     {
         index = (index1 + i * index2) % this->size;
@@ -278,7 +345,7 @@ void DBHashing::insert (Elem *elem)
     int index1 = this->h1(elem->addr);
     int index2 = this->h2(elem->addr);
     int i = 0;
-    int index = 0;
+    int index;
     while (i < this->size)
     {
         index = (index1 + i * index2) % this->size;
@@ -317,6 +384,21 @@ Elem *DBHashing::search (int addr)
     return nullptr;
 }
 
+DBHashing::~DBHashing ()
+{
+    for (int i = 0; i < this->size; i++)
+    {
+        delete this->arr[i];
+    }
+    delete[] this->arr;
+    delete this->status;
+}
+
+AVL::AVL ()
+{
+    this->root = nullptr;
+}
+
 Tree *AVL::rotateRight (Tree *&node)
 {
     Tree *leftTree = node->left;
@@ -324,6 +406,7 @@ Tree *AVL::rotateRight (Tree *&node)
     leftTree->right = node;
     return leftTree;
 }
+
 
 Tree *AVL::rotateLeft (Tree *&node)
 {
@@ -702,10 +785,18 @@ void AVL::print ()
     cout << "Print AVL in preorder:\n";
     this->preOrderAVL(this->root);
 
-};
+}
 
-Cache::Cache (SearchEngine *s, ReplacementPolicy *r) : rp(r), s_engine(s)
-{}
+AVL::~AVL ()
+{
+    removeSubTree(this->root);
+}
+
+Cache::Cache (SearchEngine *s, ReplacementPolicy *r)
+{
+    this->rp = r;
+    this->s_engine = s;
+}
 
 Cache::~Cache ()
 {
@@ -718,6 +809,7 @@ Data *Cache::read (int addr)
     Elem *tmp = this->s_engine->search(addr);
     if (tmp != nullptr)
     {
+        this->rp->access(addr);
         return tmp->data;
     }
     return nullptr;
@@ -725,13 +817,65 @@ Data *Cache::read (int addr)
 
 
 Elem *Cache::put (int addr, Data *cont)
-{ return NULL; }
+{
+
+    if (this->rp->isFull())
+    {
+        int removedAddr = this->rp->remove();
+        Elem *temp = this->s_engine->search(removedAddr);
+        this->s_engine->deleteNode(removedAddr);
+
+        Elem *newElem = new Elem(addr, cont, true);
+        this->s_engine->insert(newElem);
+        this->rp->insert(newElem);
+        return temp;
+    }
+    Elem *newElem = new Elem(addr, cont, true);
+    this->s_engine->insert(newElem);
+    this->rp->insert(newElem);
+    return nullptr;
+}
 
 Elem *Cache::write (int addr, Data *cont)
-{ return NULL; }
+{
+
+    Elem *temp = this->s_engine->search(addr);
+    if (temp != nullptr)
+    {
+        this->rp->access(addr);
+        delete temp->data;
+        temp->data = cont;
+        temp->sync = false;
+
+    }
+
+    else
+    {
+        if (this->rp->isFull())
+        {
+            int removedAddr = this->rp->remove();
+            Elem *tmp = this->s_engine->search(removedAddr);
+            this->s_engine->deleteNode(removedAddr);
+
+            Elem *newElem = new Elem(addr, cont, false);
+            this->s_engine->insert(newElem);
+            this->rp->insert(newElem);
+            return tmp;
+        }
+        Elem *newElem = new Elem(addr, cont, false);
+        this->s_engine->insert(newElem);
+        this->rp->insert(newElem);
+    }
+    return nullptr;
+}
+
 
 void Cache::printRP ()
-{}
+{
+    this->rp->print();
+}
 
 void Cache::printSE ()
-{}
+{
+    this->s_engine->print();
+}

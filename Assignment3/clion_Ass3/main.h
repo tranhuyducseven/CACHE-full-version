@@ -4,15 +4,16 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
-
+extern int MAXSIZE ;
 class	ReplacementPolicy;
 class	SearchEngine;
 
 using namespace std;
-int MAXSIZE= 5;
+
 
 class Data {
 public:
+
     virtual ~Data() = default;
     virtual string getValue() = 0;
 };

@@ -13,9 +13,13 @@ public:
 
     virtual void insert (Elem *) = 0;
 
-    virtual void remove () = 0;
+    virtual int remove () = 0;
 
     virtual void print () = 0;
+
+    bool isFull () const
+    { return count == MAXSIZE; }
+
 
     virtual ~ReplacementPolicy () = 0;
 };
@@ -26,34 +30,18 @@ class FIFO : public ReplacementPolicy
 private:
     Elem **arr;
 public:
-    FIFO ()
-    {
-        this->arr = new Elem *[MAXSIZE];
-        for (int i = 0; i < MAXSIZE; i++)
-            this->arr[i] = nullptr;
-    }
+    FIFO ();
 
-    ~FIFO ()
-    {
-        for (int i = 0; i < MAXSIZE; i++)
-        {
-            if (this->arr[i] != nullptr)
-                delete arr[i];
-        }
-        delete[] arr;
-        this->count = 0;
-    }
+    ~FIFO () override;
 
-    void access (int);
+    void access (int) override;
 
-    void insert (Elem *e);
+    void insert (Elem *e) override;
 
-    Elem *get (int);
-
-    void remove ();
+    int remove () override;
 
 
-    void print ();
+    void print () override;
 
 };
 
@@ -69,19 +57,9 @@ public:
     Node *prev;
     Elem *elem;
 
-    Node ()
-    {
-        this->next = nullptr;
-        this->prev = nullptr;
-        this->elem = nullptr;
-    }
+    Node ():next(nullptr),prev(nullptr),elem(nullptr){};
+    explicit Node (Elem *e):next(nullptr),prev(nullptr),elem(e){};
 
-    explicit Node (Elem *e)
-    {
-        this->next = nullptr;
-        this->prev = nullptr;
-        this->elem = e;
-    }
 };
 
 class OpenAddressingHash
@@ -92,7 +70,7 @@ private:
     int size;
 
 public:
-    OpenAddressingHash (int size)
+    explicit OpenAddressingHash (int size)
     {
         this->size = size;
         this->data = new Node *[size];
@@ -137,36 +115,27 @@ protected:
     OpenAddressingHash *hash;
 
 public:
-    MRU ()
-    {
-        this->head = nullptr;
-        this->tail = nullptr;
-        this->hash = new OpenAddressingHash(MAXSIZE);
-    };
+    MRU ();
 
-    ~MRU ()
-    {
-        delete this->hash;
-        this->count = 0;
-    };
+    ~MRU ()override;
 
     void putOnTop (Node *);
 
     void removeNode (Node *);
 
-    void access(int);
+    void access (int)override;
 
-    void insert (Elem *);
+    void insert (Elem *)override;
 
-    void remove ();
+    int remove ()override;
 
-    void print ();
+    void print ()override;
 };
 
 class LRU : public MRU
 {
 public:
-    void remove () override;
+    int remove () override;
 };
 
 class ElementHeap
@@ -175,17 +144,9 @@ public:
     Elem *elem;
     int freq;
 
-    ElementHeap ()
-    {
-        this->freq = 1;
-        this->elem = nullptr;
-    }
+    ElementHeap ():freq(1),elem(nullptr){};
 
-     ElementHeap (Elem *e)
-    {
-        this->freq = 1;
-        this->elem = e;
-    }
+    explicit ElementHeap (Elem *e):freq(1),elem(e){};
 
 };
 
@@ -196,7 +157,7 @@ private:
     ElementHeap **data;
     int size;
 public:
-    MinHeap (int size)
+    explicit MinHeap (int size)
     {
         this->data = new ElementHeap *[MAXSIZE];
         for (int i = 0; i < MAXSIZE; i++)
@@ -226,9 +187,9 @@ public:
 
     void insertHeap (ElementHeap *ele);
 
-    Elem *get (int);
+    void access (int);
 
-    void remove ();
+    int remove ();
 
     void print ();
 };
@@ -238,30 +199,24 @@ class LFU : public ReplacementPolicy
 private:
     MinHeap *heap;
 public:
-    LFU ()
-    {
-        this->heap = new MinHeap(this->count);
-    }
+    LFU ();
 
-    ~LFU ()
-    {
-        delete this->heap;
-    }
+    ~LFU () override;
 
-    void insert (Elem *);
+    void insert (Elem *)override;
 
-    void access (int);
+    void access (int)override;
 
-    void remove ();
+    int remove ()override;
 
-    void print ();
+    void print ()override;
 
 };
 
 class SearchEngine
 {
 public:
-    virtual Elem *search (int) = 0; // -1 if not found
+    virtual Elem *search (int) = 0;
 
     virtual void insert (Elem *) = 0;
 
@@ -286,42 +241,19 @@ private:
     Elem **arr;
 
 public:
-    DBHashing (int (*h1) (int), int (*h2) (int), int s)
-    {
-        this->h1 = h1;
-        this->h2 = h2;
-        this->size = s;
-        this->arr = new Elem *[this->size];
-        for (int i = 0; i < this->size; i++)
-        {
-            this->arr[i] = nullptr;
-        }
-        this->status = new STATUS_TYPE[this->size];
-        for (int i = 0; i < this->size; i++)
-        {
-            this->status[i] = NIL;
-        }
-    }
+    DBHashing (int (*) (int), int (*) (int), int);
 
-    ~DBHashing ()
-    {
-        for (int i = 0; i < this->size; i++)
-        {
-            delete this->arr[i];
-        }
-        delete[] this->arr;
-        delete this->status;
-    };
+    ~DBHashing () override;
 
     int searchHashing (int);
 
-    void insert (Elem *);
+    void insert (Elem *)override;
 
-    void deleteNode (int);
+    void deleteNode (int)override;
 
-    void print ();
+    void print ()override;
 
-    Elem *search (int);
+    Elem *search (int)override;
 };
 
 class Tree
@@ -335,33 +267,32 @@ public:
     Tree () : ele(nullptr), left(nullptr), right(nullptr), balance(0)
     {};
 
-    Tree (Elem *&val) : ele(val), left(nullptr), right(nullptr), balance(0)
+    explicit Tree (Elem *&val) : ele(val), left(nullptr), right(nullptr), balance(0)
     {};
 };
 
 class AVL : public SearchEngine
 {
-public:
+private:
     Tree *root;
+public:
+    AVL ();
 
-    AVL () : root(nullptr)
-    {};
+    static Tree *rotateRight (Tree *&);
 
-    Tree *rotateRight (Tree *&);
+    static Tree *rotateLeft (Tree *&);
 
-    Tree *rotateLeft (Tree *&);
+    static Tree *leftBalance (Tree *&, bool &);
 
-    Tree *leftBalance (Tree *&, bool &);
+    static Tree *rightBalance (Tree *&, bool &taller);
 
-    Tree *rightBalance (Tree *&Tree, bool &taller);
+    static Tree *removeLeftBalance (Tree *&, bool &);
 
-    Tree *removeLeftBalance (Tree *&, bool &);
-
-    Tree *removeRightBalance (Tree *&, bool &);
+    static Tree *removeRightBalance (Tree *&, bool &);
 
     void removeSubTree (Tree *);
 
-    Tree *recursiveSearch (Tree *root, int val);
+    Tree *recursiveSearch (Tree *, int val);
 
     Tree *insertRec (Tree *&, Elem *&, bool &);
 
@@ -371,16 +302,16 @@ public:
 
     void preOrderAVL (Tree *);
 
-    Elem *search (int);
+    Elem *search (int)override;
 
-    void insert (Elem *);
+    void insert (Elem *)override;
 
-    void deleteNode (int);
+    void deleteNode (int)override;
 
-    void print ();
+    void print ()override;
 
-    ~AVL ()
-    { removeSubTree(this->root); };
+    ~AVL () override;
+
 
 };
 

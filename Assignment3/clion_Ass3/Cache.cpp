@@ -60,9 +60,9 @@ void OpenAddressingHash::insertKey(Node *node)
         j = this->hashFunction(node->elem->addr, i);
         if (this->status[j] != NON_EMPTY)
         {
-            if(this->status[j]==DELETED)
+            if (this->status[j] == DELETED)
             {
-                
+
                 delete this->data[j]->elem;
                 delete this->data[j];
             }
@@ -148,7 +148,7 @@ void MRU::removeNode(Node *node)
 
 void MRU::insert(Elem *e)
 {
-    this->printCache();
+
     if (this->count == MAXSIZE)
     {
         this->remove();
@@ -157,6 +157,7 @@ void MRU::insert(Elem *e)
     this->hash->insertKey(temp);
     this->putOnTop(temp);
     this->count++;
+    this->printCache();
 }
 
 void MRU::access(int key)
@@ -353,6 +354,7 @@ int DBHashing::searchHashing(int addr)
 
 void DBHashing::insert(Elem *elem)
 {
+
     int index1 = this->h1(elem->addr);
     int index2 = this->h2(elem->addr);
     int i = 0;
@@ -362,11 +364,6 @@ void DBHashing::insert(Elem *elem)
         index = (index1 + i * index2) % this->size;
         if (this->status[index] != NON_EMPTY)
         {
-            if (this->status[index] == DELETED)
-            {
-                delete this->arr[index]->data;
-                delete this->arr[index];
-            }
             this->arr[index] = elem;
             this->status[index] = NON_EMPTY;
             break;
@@ -378,6 +375,12 @@ void DBHashing::insert(Elem *elem)
 
 void DBHashing::deleteNode(int addr)
 {
+    cout << endl
+         << endl
+         << "Print Searching:" << endl;
+    for (int i = 0; i < this->size; i++)
+        if (this->arr[i] != nullptr)
+            this->arr[i]->print();
     int k = this->searchHashing(addr);
     if (k != -1)
         this->status[k] = DELETED;
@@ -403,7 +406,8 @@ DBHashing::~DBHashing()
 {
     for (int i = 0; i < this->size; i++)
     {
-        delete this->arr[i];
+        if (this->arr[i] != nullptr)
+            delete this->arr[i];
     }
     delete[] this->arr;
     delete this->status;
@@ -830,7 +834,7 @@ Data *Cache::read(int addr)
 
 Elem *Cache::put(int addr, Data *cont)
 {
-    
+
     if (this->rp->isFull())
     {
         int removedAddr = this->rp->remove();

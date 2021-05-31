@@ -27,7 +27,6 @@ public:
     {
         return count == MAXSIZE;
     }
-    
 
     virtual ~ReplacementPolicy() = default;
 };
@@ -60,7 +59,12 @@ public:
 
     Node() : next(nullptr), prev(nullptr), elem(nullptr){};
 
-    explicit Node(Elem *e) : next(nullptr), prev(nullptr), elem(e){};
+    explicit Node(Elem *e)
+    {
+        this->next = nullptr;
+        this->prev = nullptr;
+        this->elem = e;
+    }
 };
 
 class OpenAddressingHash
@@ -150,7 +154,8 @@ public:
     void printCache()
     {
         this->hash->print();
-        cout <<endl<< "Print list Cache:" << endl;
+        cout << endl
+             << "Print list Cache:" << endl;
         Node *temp = this->head;
         while (temp != nullptr)
         {

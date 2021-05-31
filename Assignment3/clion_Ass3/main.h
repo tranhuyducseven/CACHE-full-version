@@ -58,7 +58,7 @@ public:
     bool sync;
     Elem(int a,Data* d,bool s):addr(a),data(d),sync(s){}
     ~Elem() {delete data;}
-    void print() {
+    void print() const {
         cout << addr << " " << data->getValue() << " " << (sync?"true":"false") << endl;
     }
 };

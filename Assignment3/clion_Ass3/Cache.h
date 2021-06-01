@@ -96,35 +96,11 @@ public:
 
     int searchKey(int);
 
-    void removeKey(int);
-
-    void print()
-    {
-        cout << endl
-             << endl
-             << endl
-             << "Print in hash MRU:" << endl;
-        for (int i = 0; i < this->size; i++)
-        {
-            if (this->data[i] != nullptr)
-                this->data[i]->elem->print();
-            else
-                cout << "nullptr at index: " << i << endl;
-        }
-    }
+    void removeKey(int); 
 
     Node *getNodeContainKey(int);
 
-    ~OpenAddressingHash()
-    {
-        for (int i = 0; i < this->size; i++)
-        {
-            delete this->data[i]->elem;
-            delete this->data[i];
-        }
-        delete[] this->data;
-        delete[] this->status;
-    }
+    ~OpenAddressingHash();
 };
 
 class MRU : public ReplacementPolicy
@@ -150,19 +126,6 @@ public:
     int remove() override;
 
     void print() override;
-
-    void printCache()
-    {
-        this->hash->print();
-        cout << endl
-             << "Print list Cache:" << endl;
-        Node *temp = this->head;
-        while (temp != nullptr)
-        {
-            temp->elem->print();
-            temp = temp->next;
-        }
-    }
 };
 
 class LRU : public MRU
@@ -249,13 +212,15 @@ public:
 class SearchEngine
 {
 public:
-    virtual Elem *search(int) = 0;
+    virtual Elem *search(int, int &) = 0;
 
     virtual void insert(Elem *) = 0;
 
-    virtual void deleteNode(int) = 0;
+    virtual void deleteNode(int, int&) = 0;
 
     virtual void print() = 0;
+
+    virtual int searchIndex(int) = 0;
 
     virtual ~SearchEngine() = default;
 };
@@ -278,15 +243,15 @@ public:
 
     ~DBHashing() override;
 
-    int searchHashing(int);
+    int searchIndex(int);
 
     void insert(Elem *) override;
 
-    void deleteNode(int) override;
+    void deleteNode(int,int&) override;
 
     void print() override;
 
-    Elem *search(int) override;
+    Elem *search(int,int&) override;
 };
 
 class Tree
@@ -335,11 +300,13 @@ public:
 
     void preOrderAVL(Tree *);
 
-    Elem *search(int) override;
+    Elem *search(int,int&) override;
+
+    int searchIndex(int) override;
 
     void insert(Elem *) override;
 
-    void deleteNode(int) override;
+    void deleteNode(int,int&) override;
 
     void print() override;
 };

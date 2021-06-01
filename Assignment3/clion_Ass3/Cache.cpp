@@ -62,7 +62,6 @@ void OpenAddressingHash::insertKey(Node *node)
         {
             if (this->status[j] == DELETED)
             {
-
                 delete this->data[j]->elem;
                 delete this->data[j];
             }
@@ -108,7 +107,16 @@ Node *OpenAddressingHash::getNodeContainKey(int key)
     else
         return nullptr;
 }
-
+OpenAddressingHash::~OpenAddressingHash()
+{
+    for (int i = 0; i < this->size; i++)
+    {
+        delete this->data[i]->elem;
+        delete this->data[i];
+    }
+    delete[] this->data;
+    delete[] this->status;
+}
 // MRU
 MRU::MRU()
 {
@@ -157,7 +165,7 @@ void MRU::insert(Elem *e)
     this->hash->insertKey(temp);
     this->putOnTop(temp);
     this->count++;
-    this->printCache();
+    //     this->printCache();
 }
 
 void MRU::access(int key)
@@ -191,6 +199,7 @@ void MRU::print()
 
 MRU::~MRU()
 {
+
     delete this->hash;
     this->count = 0;
 }
@@ -333,7 +342,7 @@ DBHashing::DBHashing(int (*h1)(int), int (*h2)(int), int s)
     }
 }
 
-int DBHashing::searchHashing(int addr)
+int DBHashing::searchIndex(int addr)
 {
     int index1 = this->h1(addr);
     int index2 = this->h2(addr);
@@ -373,17 +382,10 @@ void DBHashing::insert(Elem *elem)
     }
 }
 
-void DBHashing::deleteNode(int addr)
+void DBHashing::deleteNode(int addr, int &index)
 {
-    cout << endl
-         << endl
-         << "Print Searching:" << endl;
-    for (int i = 0; i < this->size; i++)
-        if (this->arr[i] != nullptr)
-            this->arr[i]->print();
-    int k = this->searchHashing(addr);
-    if (k != -1)
-        this->status[k] = DELETED;
+    if (index != -1)
+        this->status[index] = DELETED;
 }
 
 void DBHashing::print()
@@ -394,9 +396,8 @@ void DBHashing::print()
             this->arr[i]->print();
 }
 
-Elem *DBHashing::search(int addr)
+Elem *DBHashing::search(int addr, int &index)
 {
-    int index = this->searchHashing(addr);
     if (index != -1)
         return this->arr[index];
     return nullptr;
@@ -404,11 +405,6 @@ Elem *DBHashing::search(int addr)
 
 DBHashing::~DBHashing()
 {
-    for (int i = 0; i < this->size; i++)
-    {
-        if (this->arr[i] != nullptr)
-            delete this->arr[i];
-    }
     delete[] this->arr;
     delete this->status;
 }
@@ -671,7 +667,7 @@ Tree *AVL::removeLeftBalance(Tree *&r, bool &isShorter)
     return r;
 }
 
-void AVL::deleteNode(int addr)
+void AVL::deleteNode(int addr, int &index)
 {
     bool isShorter = false;
     this->root = removeRec(root, addr, isShorter);
@@ -739,14 +735,17 @@ Tree *AVL::removeRec(Tree *&r, const int &val, bool &isShorter)
     }
 }
 
-Elem *AVL::search(int addr) // -1 if not found
+Elem *AVL::search(int addr, int &index) // -1 if not found
 {
     Tree *tmp = this->recursiveSearch(this->root, addr);
     if (tmp != nullptr && tmp->ele != nullptr)
         return tmp->ele;
     return nullptr;
 }
-
+int AVL::searchIndex(int addr)
+{
+    return -1;
+}
 Tree *AVL::recursiveSearch(Tree *node, int val)
 {
     if (node == nullptr)
@@ -823,7 +822,8 @@ Cache::~Cache()
 
 Data *Cache::read(int addr)
 {
-    Elem *tmp = this->s_engine->search(addr);
+    int searchIndex = this->s_engine->searchIndex(addr);
+    Elem *tmp = this->s_engine->search(addr, searchIndex);
     if (tmp != nullptr)
     {
         this->rp->access(addr);
@@ -838,8 +838,9 @@ Elem *Cache::put(int addr, Data *cont)
     if (this->rp->isFull())
     {
         int removedAddr = this->rp->remove();
-        Elem *temp = this->s_engine->search(removedAddr);
-        this->s_engine->deleteNode(removedAddr);
+        int searchIndex = this->s_engine->searchIndex(removedAddr);
+        Elem *temp = this->s_engine->search(removedAddr, searchIndex);
+        this->s_engine->deleteNode(removedAddr, searchIndex);
 
         Elem *newElem = new Elem(addr, cont, true);
         this->s_engine->insert(newElem);
@@ -855,7 +856,8 @@ Elem *Cache::put(int addr, Data *cont)
 Elem *Cache::write(int addr, Data *cont)
 {
 
-    Elem *temp = this->s_engine->search(addr);
+    int indexSearch = this->s_engine->searchIndex(addr);
+    Elem *temp = this->s_engine->search(addr, indexSearch);
     if (temp != nullptr)
     {
         this->rp->access(addr);
@@ -869,8 +871,9 @@ Elem *Cache::write(int addr, Data *cont)
         if (this->rp->isFull())
         {
             int removedAddr = this->rp->remove();
-            Elem *tmp = this->s_engine->search(removedAddr);
-            this->s_engine->deleteNode(removedAddr);
+            int searchIndex = this->s_engine->searchIndex(removedAddr);
+            Elem *tmp = this->s_engine->search(removedAddr, searchIndex);
+            this->s_engine->deleteNode(removedAddr, searchIndex);
 
             Elem *newElem = new Elem(addr, cont, false);
             this->s_engine->insert(newElem);

@@ -130,7 +130,7 @@ int main(int argc, char *argv[])
     for (int i = 0; i < 1; i++)
     {
         string filename = "tests/test";
-        filename += to_string(i + 3);
+        filename += to_string(i + 4);
         filename += ".txt";
         cout << "------------------" + filename + "-----------------" << endl;
             simulate(filename);

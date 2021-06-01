@@ -98,7 +98,7 @@ void simulate(string filename)
             if (res == NULL)
             {
                 ss >> tmp;
-                Elem *temp = c->put(addr, getData(tmp));
+                returnElemList.push_back(c->put(addr, getData(tmp)));
             }
             else
             {
@@ -108,14 +108,12 @@ void simulate(string filename)
         case 'U': //put
             ss >> addr;
             ss >> tmp;
-            Elem *v = c->put(addr, getData(tmp));
-            returnElemList.push_back(v);
+            returnElemList.push_back(c->put(addr, getData(tmp)));
             break;
         case 'W': //write
             ss >> addr;
             ss >> tmp;
-            Elem *v = c->write(addr, getData(tmp));
-            returnElemList.push_back(v);
+            returnElemList.push_back(c->write(addr, getData(tmp)));
             break;
         case 'P': // print
             cout << "Print replacement buffer\n";
@@ -128,10 +126,12 @@ void simulate(string filename)
         }
     }
     delete c;
-    for (int i = 0; i < returnElemList.size(); i++)
+    for (int i = 0; i < (int)returnElemList.size(); i++)
     {
-        if (!returnElemList[i])
+        if (returnElemList[i] != nullptr)
+        {
             delete returnElemList[i];
+        }
     }
 }
 int main(int argc, char *argv[])
@@ -139,7 +139,7 @@ int main(int argc, char *argv[])
     for (int i = 0; i < 1; i++)
     {
         string filename = "tests/test";
-        filename += to_string(i + 2);
+        filename += to_string(i + 3);
         filename += ".txt";
         cout << "------------------" + filename + "-----------------" << endl;
         simulate(filename);

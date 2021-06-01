@@ -293,6 +293,9 @@ public:
 
     ~DBHashing() override
     {
+        for (int i = 0; i < this->size; i++)
+            if (this->arr[i] != nullptr)
+                delete this->arr[i];
         delete[] this->arr;
         delete this->status;
     }

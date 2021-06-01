@@ -184,7 +184,6 @@ void MRU::print()
     }
 }
 
-
 int LRU::getAddressReplacement()
 {
     return this->tail->elem->addr;
@@ -268,13 +267,12 @@ void MinHeap::remove()
 {
     if (this->size > 0)
     {
+        delete this->data[0];
         data[0] = data[this->size - 1];
         this->size = this->size - 1;
         reHeapDown(0);
     }
 }
-
-
 
 void LFU::insert(Elem *e)
 {
@@ -303,23 +301,22 @@ void LFU::print()
     this->heap->print();
 }
 
-
 int DBHashing::searchIndex(int addr)
 {
     int index1 = this->h1(addr);
     int index2 = this->h2(addr);
     int i = 0;
-    int index;
-    do
+    int index = (index1 + i * index2) % this->size;
+    while (this->status[index] != NIL && i < this->size)
     {
-        index = (index1 + i * index2) % this->size;
         if (this->arr[index] != nullptr)
         {
             if (this->arr[index]->addr == addr && this->status[index] == NON_EMPTY)
                 return index;
             i += 1;
         }
-    } while (this->status[index] != NIL && i < this->size);
+        index = (index1 + i * index2) % this->size;
+    };
     return -1;
 }
 

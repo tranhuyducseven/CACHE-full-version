@@ -1,77 +1,93 @@
 #ifndef MAIN_H
 #define MAIN_H
-#include<string>
+#include <string>
 #include <iostream>
 #include <sstream>
 #include <fstream>
-extern int MAXSIZE ;
-class	ReplacementPolicy;
-class	SearchEngine;
+extern int MAXSIZE;
+class ReplacementPolicy;
+class SearchEngine;
 
 using namespace std;
 
-
-class Data {
+class Data
+{
 public:
-
     virtual ~Data() = default;
     virtual string getValue() = 0;
 };
 
-class Int: public Data {
+class Int : public Data
+{
     int value;
+
 public:
-    Int(int v):value(v){}
-    string getValue() {
+    Int(int v) : value(v) {}
+    string getValue()
+    {
         return to_string(value);
     }
 };
-class Float: public Data {
+class Float : public Data
+{
     float value;
+
 public:
-    Float(float v):value(v){}
-    string getValue() {
+    Float(float v) : value(v) {}
+    string getValue()
+    {
         return to_string(value);
     }
 };
-class Bool:public Data {
+class Bool : public Data
+{
     bool value;
+
 public:
-    Bool(bool v):value(v){}
-    string getValue() {
-        return value?"true":"false";
+    Bool(bool v) : value(v) {}
+    string getValue()
+    {
+        return value ? "true" : "false";
     }
 };
-class Address:public Data {
+class Address : public Data
+{
     int value;
+
 public:
-    Address(int v):value(v){}
-    string getValue() {
-        return to_string(value)+"A";
+    Address(int v) : value(v) {}
+    string getValue()
+    {
+        return to_string(value) + "A";
     }
 };
 
-class Elem {
+class Elem
+{
 public:
     int addr;
-    Data* data;
+    Data *data;
     bool sync;
-    Elem(int a,Data* d,bool s):addr(a),data(d),sync(s){}
-    ~Elem() {delete data;}
-    void print() const {
-        cout << addr << " " << data->getValue() << " " << (sync?"true":"false") << endl;
+    Elem() : addr(-1), data(nullptr), sync(false){};
+    Elem(int a, Data *d, bool s) : addr(a), data(d), sync(s) {}
+    ~Elem() { delete data; }
+    void print() const
+    {
+        cout << addr << " " << data->getValue() << " " << (sync ? "true" : "false") << endl;
     }
 };
 
-class Cache {
-    ReplacementPolicy* rp;
-    SearchEngine* s_engine;
+class Cache
+{
+    ReplacementPolicy *rp;
+    SearchEngine *s_engine;
+
 public:
-    Cache(SearchEngine* s,ReplacementPolicy* r);
+    Cache(SearchEngine *s, ReplacementPolicy *r);
     ~Cache();
-    Data* read(int addr);
-    Elem* put(int addr, Data* cont);
-    Elem* write(int addr, Data* cont);
+    Data *read(int addr);
+    Elem *put(int addr, Data *cont);
+    Elem *write(int addr, Data *cont);
     void printRP();
     void printSE();
 };

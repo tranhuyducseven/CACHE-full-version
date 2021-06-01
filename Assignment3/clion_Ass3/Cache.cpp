@@ -15,15 +15,16 @@ void FIFO::insert(Elem *e)
 {
     this->arr[this->count++] = e;
 }
-
-int FIFO::remove()
+int FIFO::getAddressReplacement()
 {
-    int addr = this->arr[0]->addr;
+    return this->arr[0]->addr;
+}
+void FIFO::remove()
+{
     delete this->arr[0];
     for (int i = 0; i < MAXSIZE - 1; i++)
         this->arr[i] = this->arr[i + 1];
     this->count--;
-    return addr;
 }
 
 void FIFO::print()
@@ -107,23 +108,8 @@ Node *OpenAddressingHash::getNodeContainKey(int key)
     else
         return nullptr;
 }
-OpenAddressingHash::~OpenAddressingHash()
-{
-    for (int i = 0; i < this->size; i++)
-    {
-        delete this->data[i]->elem;
-        delete this->data[i];
-    }
-    delete[] this->data;
-    delete[] this->status;
-}
+
 // MRU
-MRU::MRU()
-{
-    this->head = nullptr;
-    this->tail = nullptr;
-    this->hash = new OpenAddressingHash(MAXSIZE);
-}
 
 void MRU::putOnTop(Node *node)
 {
@@ -177,14 +163,15 @@ void MRU::access(int key)
         this->putOnTop(tmp);
     }
 }
-
-int MRU::remove()
+int MRU::getAddressReplacement()
+{
+    return this->head->elem->addr;
+}
+void MRU::remove()
 {
     this->hash->removeKey(this->head->elem->addr);
-    int addr = this->head->elem->addr;
     this->removeNode(this->head);
     this->count--;
-    return addr;
 }
 
 void MRU::print()
@@ -197,20 +184,16 @@ void MRU::print()
     }
 }
 
-MRU::~MRU()
+
+int LRU::getAddressReplacement()
 {
-
-    delete this->hash;
-    this->count = 0;
+    return this->tail->elem->addr;
 }
-
-int LRU::remove()
+void LRU::remove()
 {
     this->hash->removeKey(this->tail->elem->addr);
-    int addr = this->tail->elem->addr;
     this->removeNode(this->tail);
     this->count--;
-    return addr;
 }
 
 //LFU
@@ -277,24 +260,21 @@ void MinHeap::print()
         this->data[i]->elem->print();
     }
 }
-
-int MinHeap::remove()
+int MinHeap::getAddrMin()
+{
+    return this->data[0]->elem->addr;
+}
+void MinHeap::remove()
 {
     if (this->size > 0)
     {
-        int addr = this->data[0]->elem->addr;
         data[0] = data[this->size - 1];
         this->size = this->size - 1;
         reHeapDown(0);
-        return addr;
     }
-    return -1;
 }
 
-LFU::LFU()
-{
-    this->heap = new MinHeap(this->count);
-}
+
 
 void LFU::insert(Elem *e)
 {
@@ -308,11 +288,14 @@ void LFU::access(int addr)
 
     this->heap->access(addr);
 }
-
-int LFU::remove()
+int LFU::getAddressReplacement()
+{
+    return this->heap->getAddrMin();
+}
+void LFU::remove()
 {
     this->count--;
-    return this->heap->remove();
+    this->heap->remove();
 }
 
 void LFU::print()
@@ -320,27 +303,6 @@ void LFU::print()
     this->heap->print();
 }
 
-LFU::~LFU()
-{
-    this->heap = new MinHeap(this->count);
-}
-
-DBHashing::DBHashing(int (*h1)(int), int (*h2)(int), int s)
-{
-    this->h1 = h1;
-    this->h2 = h2;
-    this->size = s;
-    this->arr = new Elem *[this->size];
-    for (int i = 0; i < this->size; i++)
-    {
-        this->arr[i] = nullptr;
-    }
-    this->status = new STATUS_TYPE[this->size];
-    for (int i = 0; i < this->size; i++)
-    {
-        this->status[i] = NIL;
-    }
-}
 
 int DBHashing::searchIndex(int addr)
 {
@@ -401,17 +363,6 @@ Elem *DBHashing::search(int addr, int &index)
     if (index != -1)
         return this->arr[index];
     return nullptr;
-}
-
-DBHashing::~DBHashing()
-{
-    delete[] this->arr;
-    delete this->status;
-}
-
-AVL::AVL()
-{
-    this->root = nullptr;
 }
 
 Tree *AVL::rotateRight(Tree *&node)
@@ -803,11 +754,6 @@ void AVL::print()
     this->preOrderAVL(this->root);
 }
 
-AVL::~AVL()
-{
-    removeSubTree(this->root);
-}
-
 Cache::Cache(SearchEngine *s, ReplacementPolicy *r)
 {
     this->rp = r;
@@ -837,10 +783,11 @@ Elem *Cache::put(int addr, Data *cont)
 
     if (this->rp->isFull())
     {
-        int removedAddr = this->rp->remove();
+        int removedAddr = this->rp->getAddressReplacement();
         int searchIndex = this->s_engine->searchIndex(removedAddr);
         Elem *temp = this->s_engine->search(removedAddr, searchIndex);
         this->s_engine->deleteNode(removedAddr, searchIndex);
+        this->rp->remove();
 
         Elem *newElem = new Elem(addr, cont, true);
         this->s_engine->insert(newElem);
@@ -870,10 +817,11 @@ Elem *Cache::write(int addr, Data *cont)
     {
         if (this->rp->isFull())
         {
-            int removedAddr = this->rp->remove();
+            int removedAddr = this->rp->getAddressReplacement();
             int searchIndex = this->s_engine->searchIndex(removedAddr);
             Elem *tmp = this->s_engine->search(removedAddr, searchIndex);
             this->s_engine->deleteNode(removedAddr, searchIndex);
+            this->rp->remove();
 
             Elem *newElem = new Elem(addr, cont, false);
             this->s_engine->insert(newElem);

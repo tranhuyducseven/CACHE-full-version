@@ -19,7 +19,7 @@ public:
 
     virtual void insert(Elem *) = 0;
 
-    virtual int remove() = 0;
+    virtual void remove() = 0;
 
     virtual void print() = 0;
 
@@ -27,6 +27,8 @@ public:
     {
         return count == MAXSIZE;
     }
+
+    virtual int getAddressReplacement() = 0;
 
     virtual ~ReplacementPolicy() = default;
 };
@@ -45,7 +47,9 @@ public:
 
     void insert(Elem *e) override;
 
-    int remove() override;
+    int getAddressReplacement() override;
+
+    void remove() override;
 
     void print() override;
 };
@@ -90,17 +94,26 @@ public:
         }
     }
 
+    ~OpenAddressingHash()
+    {
+        for (int i = 0; i < this->size; i++)
+        {
+            delete this->data[i]->elem;
+            delete this->data[i];
+        }
+        delete[] this->data;
+        delete[] this->status;
+    }
+
     int hashFunction(int, int) const;
 
     void insertKey(Node *);
 
     int searchKey(int);
 
-    void removeKey(int); 
+    void removeKey(int);
 
     Node *getNodeContainKey(int);
-
-    ~OpenAddressingHash();
 };
 
 class MRU : public ReplacementPolicy
@@ -111,9 +124,18 @@ protected:
     OpenAddressingHash *hash;
 
 public:
-    MRU();
+    MRU()
+    {
+        this->head = nullptr;
+        this->tail = nullptr;
+        this->hash = new OpenAddressingHash(MAXSIZE);
+    }
 
-    ~MRU() override;
+    ~MRU() override
+    {
+        delete this->hash;
+        this->count = 0;
+    }
 
     void putOnTop(Node *);
 
@@ -123,7 +145,9 @@ public:
 
     void insert(Elem *) override;
 
-    int remove() override;
+    void remove() override;
+
+    int getAddressReplacement() override;
 
     void print() override;
 };
@@ -131,7 +155,8 @@ public:
 class LRU : public MRU
 {
 public:
-    int remove() override;
+    void remove() override;
+    int getAddressReplacement() override;
 };
 
 class ElementHeap
@@ -185,7 +210,9 @@ public:
 
     void access(int);
 
-    int remove();
+    int getAddrMin();
+
+    void remove();
 
     void print();
 };
@@ -196,15 +223,23 @@ private:
     MinHeap *heap;
 
 public:
-    LFU();
+    LFU()
+    {
+        this->heap = new MinHeap(this->count);
+    }
 
-    ~LFU() override;
+    ~LFU() override
+    {
+        delete this->heap;
+    }
 
     void insert(Elem *) override;
 
     void access(int) override;
 
-    int remove() override;
+    int getAddressReplacement() override;
+
+    void remove() override;
 
     void print() override;
 };
@@ -216,7 +251,7 @@ public:
 
     virtual void insert(Elem *) = 0;
 
-    virtual void deleteNode(int, int&) = 0;
+    virtual void deleteNode(int, int &) = 0;
 
     virtual void print() = 0;
 
@@ -239,19 +274,38 @@ private:
     Elem **arr;
 
 public:
-    DBHashing(int (*)(int), int (*)(int), int);
+    DBHashing(int (*h1)(int), int (*h2)(int), int s)
+    {
+        this->h1 = h1;
+        this->h2 = h2;
+        this->size = s;
+        this->arr = new Elem *[this->size];
+        for (int i = 0; i < this->size; i++)
+        {
+            this->arr[i] = nullptr;
+        }
+        this->status = new STATUS_TYPE[this->size];
+        for (int i = 0; i < this->size; i++)
+        {
+            this->status[i] = NIL;
+        }
+    }
 
-    ~DBHashing() override;
+    ~DBHashing() override
+    {
+        delete[] this->arr;
+        delete this->status;
+    }
 
     int searchIndex(int);
 
     void insert(Elem *) override;
 
-    void deleteNode(int,int&) override;
+    void deleteNode(int, int &) override;
 
     void print() override;
 
-    Elem *search(int,int&) override;
+    Elem *search(int, int &) override;
 };
 
 class Tree
@@ -273,8 +327,14 @@ private:
     Tree *root;
 
 public:
-    AVL();
-    ~AVL() override;
+    AVL()
+    {
+        this->root = nullptr;
+    }
+    ~AVL() override
+    {
+        removeSubTree(this->root);
+    }
 
     static Tree *rotateRight(Tree *&);
 
@@ -300,13 +360,13 @@ public:
 
     void preOrderAVL(Tree *);
 
-    Elem *search(int,int&) override;
+    Elem *search(int, int &) override;
 
     int searchIndex(int) override;
 
     void insert(Elem *) override;
 
-    void deleteNode(int,int&) override;
+    void deleteNode(int, int &) override;
 
     void print() override;
 };

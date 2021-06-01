@@ -2,6 +2,7 @@
 #include "main.h"
 #include "Cache.h"
 #include "Cache.cpp"
+#include <vector>
 int MAXSIZE = 5;
 int h1(int k)
 {
@@ -40,6 +41,7 @@ Data *getData(string s)
 }
 void simulate(string filename)
 {
+    vector<Elem *> returnElemList;
     ifstream ifs;
     ifs.open(filename, std::ifstream::in);
     string s;
@@ -96,7 +98,7 @@ void simulate(string filename)
             if (res == NULL)
             {
                 ss >> tmp;
-                c->put(addr, getData(tmp));
+                Elem *temp = c->put(addr, getData(tmp));
             }
             else
             {
@@ -106,12 +108,14 @@ void simulate(string filename)
         case 'U': //put
             ss >> addr;
             ss >> tmp;
-            c->put(addr, getData(tmp));
+            Elem *v = c->put(addr, getData(tmp));
+            returnElemList.push_back(v);
             break;
         case 'W': //write
             ss >> addr;
             ss >> tmp;
-            c->write(addr, getData(tmp));
+            Elem *v = c->write(addr, getData(tmp));
+            returnElemList.push_back(v);
             break;
         case 'P': // print
             cout << "Print replacement buffer\n";
@@ -124,16 +128,21 @@ void simulate(string filename)
         }
     }
     delete c;
+    for (int i = 0; i < returnElemList.size(); i++)
+    {
+        if (!returnElemList[i])
+            delete returnElemList[i];
+    }
 }
 int main(int argc, char *argv[])
 {
     for (int i = 0; i < 1; i++)
     {
         string filename = "tests/test";
-        filename += to_string(i + 4);
+        filename += to_string(i + 2);
         filename += ".txt";
         cout << "------------------" + filename + "-----------------" << endl;
-            simulate(filename);
+        simulate(filename);
     }
     return 0;
 }

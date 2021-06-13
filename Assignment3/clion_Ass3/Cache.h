@@ -98,8 +98,11 @@ public:
     {
         for (int i = 0; i < this->size; i++)
         {
-            delete this->data[i]->elem;
-            delete this->data[i];
+            if (this->data[i])
+            {
+                delete this->data[i]->elem;
+                delete this->data[i];
+            }
         }
         delete[] this->data;
         delete[] this->status;
@@ -293,14 +296,11 @@ public:
 
     ~DBHashing() override
     {
-        for (int i = 0; i < this->size; i++)
-            if (this->arr[i] != nullptr)
-                delete this->arr[i];
-        delete[] this->arr;
-        delete this->status;
+       delete[] this->arr;
+        delete[] this->status;
     }
 
-    int searchIndex(int);
+    int searchIndex(int) override;
 
     void insert(Elem *) override;
 
@@ -375,3 +375,4 @@ public:
 };
 
 #endif
+//11:04 PM 13/6/2021

@@ -21,7 +21,6 @@ int FIFO::getAddressReplacement()
 }
 void FIFO::remove()
 {
-    delete this->arr[0];
     for (int i = 0; i < MAXSIZE - 1; i++)
         this->arr[i] = this->arr[i + 1];
     this->count--;
@@ -63,8 +62,7 @@ void OpenAddressingHash::insertKey(Node *node)
         {
             if (this->status[j] == DELETED)
             {
-                delete this->data[j]->elem;
-                delete this->data[j];
+              delete this->data[j];
             }
             this->data[j] = node;
             this->status[j] = NON_EMPTY;
@@ -82,7 +80,7 @@ int OpenAddressingHash::searchKey(int key)
     do
     {
         j = this->hashFunction(key, i);
-        if (this->data[j]->elem->addr == key && this->status[j] == NON_EMPTY)
+        if (this->status[j] == NON_EMPTY && this->data[j]->elem->addr == key)
             return j;
         i += 1;
     } while (this->status[j] != NIL && i < this->size);
@@ -276,7 +274,7 @@ void MinHeap::remove()
 
 void LFU::insert(Elem *e)
 {
-    ElementHeap *tmp = new ElementHeap(e);
+    auto *tmp = new ElementHeap(e);
     this->heap->insertHeap(tmp);
     this->count++;
 }
@@ -311,12 +309,12 @@ int DBHashing::searchIndex(int addr)
     {
         if (this->arr[index] != nullptr)
         {
-            if (this->arr[index]->addr == addr && this->status[index] == NON_EMPTY)
+            if (this->status[index] == NON_EMPTY && this->arr[index]->addr == addr)
                 return index;
             i += 1;
         }
         index = (index1 + i * index2) % this->size;
-    };
+    }
     return -1;
 }
 
@@ -759,8 +757,8 @@ Cache::Cache(SearchEngine *s, ReplacementPolicy *r)
 
 Cache::~Cache()
 {
-    delete this->s_engine;
     delete this->rp;
+    delete this->s_engine;
 }
 
 Data *Cache::read(int addr)
@@ -841,3 +839,4 @@ void Cache::printSE()
 {
     this->s_engine->print();
 }
+//11:04 PM 13/6/2021

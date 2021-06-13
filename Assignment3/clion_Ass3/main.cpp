@@ -41,13 +41,13 @@ Data *getData(string s)
 }
 void simulate(string filename)
 {
-    vector<Elem *> returnElemList;
     ifstream ifs;
     ifs.open(filename, std::ifstream::in);
     string s;
     SearchEngine *sr;
     ReplacementPolicy *rp;
     Cache *c;
+    Elem *returnElem;
     while (getline(ifs, s))
     {
         stringstream ss(s);
@@ -91,55 +91,64 @@ void simulate(string filename)
                 rp = new MRU();
             c = new Cache(sr, rp);
             break;
-        case 'R': //read
+        case 'R':
+        { //read
             ss >> addr;
             Data *res;
             res = c->read(addr);
             if (res == NULL)
             {
                 ss >> tmp;
-                returnElemList.push_back(c->put(addr, getData(tmp)));
+                returnElem = c->put(addr, getData(tmp));
+                if (returnElem)
+                    delete returnElem;
             }
             else
             {
                 cout << res->getValue() << endl;
             }
             break;
-        case 'U': //put
+        }
+        case 'U':
+        { //put
             ss >> addr;
             ss >> tmp;
-            returnElemList.push_back(c->put(addr, getData(tmp)));
+            returnElem = c->put(addr, getData(tmp));
+            if (returnElem)
+                delete returnElem;
             break;
-        case 'W': //write
+        }
+        case 'W':
+        { //write
             ss >> addr;
             ss >> tmp;
-            returnElemList.push_back(c->write(addr, getData(tmp)));
+            returnElem = c->write(addr, getData(tmp));
+            if (returnElem)
+                delete returnElem;
             break;
-        case 'P': // print
+        }
+        case 'P':
+        { // print
             cout << "Print replacement buffer\n";
             c->printRP();
             break;
-        case 'E': //
+        }
+        case 'E':
+        { //
             cout << "Print search buffer\n";
             c->printSE();
             break;
         }
-    }
-    delete c;
-    for (int i = 0; i < (int)returnElemList.size(); i++)
-    {
-        if (returnElemList[i] != nullptr)
-        {
-            delete returnElemList[i];
         }
     }
+    delete c;
 }
 int main(int argc, char *argv[])
 {
-    for (int i = 0; i < 1; i++)
+    for (int i = 0; i < 9; i++)
     {
         string filename = "tests/test";
-        filename += to_string(i + 3);
+        filename += to_string(i + 1);
         filename += ".txt";
         cout << "------------------" + filename + "-----------------" << endl;
         simulate(filename);

@@ -1,3 +1,0 @@
-/media/D/Learning/HCMUT/DSA/Code/On class/AVLTree/clion/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/media/D/Learning/HCMUT/DSA/Code/On class/AVLTree/clion/cmake-build-debug/CMakeFiles/edit_cache.dir
-/media/D/Learning/HCMUT/DSA/Code/On class/AVLTree/clion/cmake-build-debug/CMakeFiles/clion.dir
